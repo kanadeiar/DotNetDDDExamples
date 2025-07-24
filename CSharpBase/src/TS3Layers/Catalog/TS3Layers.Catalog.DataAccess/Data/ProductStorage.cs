@@ -9,7 +9,7 @@ public class ProductStorage
 
     public int NextIdentity() => ++_lastId;
 
-    public IEnumerable<ProductEntry> All() => _entries.Values;
+    public IEnumerable<ProductEntry> All(bool withDeleted = false) => _entries.Values.Where(e => withDeleted || !e.IsDeleted);
 
     public ProductEntry? Load(int id) => _entries.GetValueOrDefault(id);
 

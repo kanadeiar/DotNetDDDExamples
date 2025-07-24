@@ -9,7 +9,7 @@ public class BrandStorage
 
     public int NextIdentity() => ++_lastId;
     
-    public IEnumerable<BrandEntry> All() => _entries.Values;
+    public IEnumerable<BrandEntry> All(bool withDeleted = false) => _entries.Values.Where(e => withDeleted || !e.IsDeleted);
 
     public BrandEntry? Load(int id) => _entries.GetValueOrDefault(id);
 

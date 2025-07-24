@@ -32,4 +32,48 @@ public class BrandScript(BrandStorage storage)
             return Result.Fail<int>("Не удалось добавить новый элемент. Ошибка: " + e);
         }
     }
+
+    public Result ChangeName(int id, string newName)
+    {
+        try
+        {
+            storage.BeginTransaction();
+            var entry = storage.Load(id);
+            if (entry is null) throw new ApplicationException("Элемент не найден для переименования");
+            var item = BrandItem.Restore(entry);
+
+            item.Rename(newName);
+
+            storage.Save(item.Entry());
+            storage.Commit();
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            storage.Rollback();
+            return Result.Fail("Не удалось изменить название элемента. Ошибка: " + e);
+        }
+    }
+
+    public Result DeleteItem(int id)
+    {
+        try
+        {
+            storage.BeginTransaction();
+            var entry = storage.Load(id);
+            if (entry is null) throw new ApplicationException("Элемент не найден для удаления");
+            var item = BrandItem.Restore(entry);
+
+            item.Delete();
+
+            storage.Save(item.Entry());
+            storage.Commit();
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            storage.Rollback();
+            return Result.Fail("Не удалось удалить элемент. Ошибка: " + e);
+        }
+    }
 }

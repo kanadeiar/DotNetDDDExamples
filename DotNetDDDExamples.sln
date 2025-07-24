@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS3Layers.Catalog.DataAcces
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS3Layers.Catalog.Presentation", "CSharpBase\src\TS3Layers\Catalog\TS3Layers.Catalog.Presentation\TS3Layers.Catalog.Presentation.csproj", "{1144691C-C93A-470D-8E8F-FA003114CC50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS3Layers.Catalog.Presentation.Tests.Story", "CSharpBase\tests\TS3Layers\Catalog\TS3Layers.Catalog.Presentation.Tests.Story\TS3Layers.Catalog.Presentation.Tests.Story.csproj", "{17B46E5E-9F02-496B-B095-61BF5BD98246}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{1144691C-C93A-470D-8E8F-FA003114CC50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1144691C-C93A-470D-8E8F-FA003114CC50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1144691C-C93A-470D-8E8F-FA003114CC50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B46E5E-9F02-496B-B095-61BF5BD98246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B46E5E-9F02-496B-B095-61BF5BD98246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B46E5E-9F02-496B-B095-61BF5BD98246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B46E5E-9F02-496B-B095-61BF5BD98246}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{43FBF8AC-B7DA-4E9B-81EB-B6A11432CE20} = {7B7C41E6-FC26-4DA1-A9E0-5DF309C1964B}
 		{2E4D53C0-CD8B-4FB0-BB96-572A02FCFF5A} = {7B7C41E6-FC26-4DA1-A9E0-5DF309C1964B}
 		{1144691C-C93A-470D-8E8F-FA003114CC50} = {7B7C41E6-FC26-4DA1-A9E0-5DF309C1964B}
+		{17B46E5E-9F02-496B-B095-61BF5BD98246} = {DB8547BF-A7CE-4DAC-ACE0-76CCED546F57}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CF52F65-07D0-4D06-B813-6177B3867551}

@@ -8,8 +8,8 @@ public class CategoryStorage
     private int _lastId;
 
     public int NextIdentity() => ++_lastId;
-    
-    public IEnumerable<CategoryEntry> All() => _entries.Values;
+
+    public IEnumerable<CategoryEntry> All(bool withDeleted = false) => _entries.Values.Where(e => withDeleted || !e.IsDeleted);
 
     public CategoryEntry? Load(int id) => _entries.GetValueOrDefault(id);
 

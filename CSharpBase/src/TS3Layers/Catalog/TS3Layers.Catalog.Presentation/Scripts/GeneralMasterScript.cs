@@ -33,7 +33,7 @@ public class GeneralMasterScript(ProductStorage productStorage, BrandStorage bra
 
         var items = productStorage.All()
             .Select(e => new { e, p = ProductItem.Restore(e) })
-            .Select(tuple => $"{categories[tuple.e.CategoryId]} {brands[tuple.e.CategoryId]} - {tuple.p}");
+            .Select(tuple => $"{categories[tuple.e.CategoryId]} {brands[tuple.e.CategoryId]} - {tuple.p.FullText()}");
 
         return Result.Ok(items);
     }
