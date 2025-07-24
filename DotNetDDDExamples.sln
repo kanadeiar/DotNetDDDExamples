@@ -1,0 +1,87 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharpBase", "CSharpBase", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CF6817F9-39C7-4419-B95B-7ACF9F75573B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4D0905FF-7A9E-40D2-9531-49540C1346EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{754FC069-D67B-A9D7-50A1-8D1CA196D8F1}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TS3Layers", "TS3Layers", "{EF50AC7E-3B0B-4E93-B192-DD1838CC06D5}"
+	ProjectSection(SolutionItems) = preProject
+		CSharpBase\src\TS3Layers\README.md = CSharpBase\src\TS3Layers\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TS3Layers", "TS3Layers", "{164FAFD6-8C94-47BA-9AA1-C8E81EFD0C81}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{7B7C41E6-FC26-4DA1-A9E0-5DF309C1964B}"
+	ProjectSection(SolutionItems) = preProject
+		CSharpBase\src\TS3Layers\Catalog\README.md = CSharpBase\src\TS3Layers\Catalog\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{DB8547BF-A7CE-4DAC-ACE0-76CCED546F57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS3LayersConsoleApp", "CSharpBase\src\TS3Layers\TS3LayersConsoleApp\TS3LayersConsoleApp.csproj", "{78449B6D-010F-40E1-9317-E7AD13AC78A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS3Layers.Catalog.Core", "CSharpBase\src\TS3Layers\Catalog\TS3Layers.Catalog.Core\TS3Layers.Catalog.Core.csproj", "{43FBF8AC-B7DA-4E9B-81EB-B6A11432CE20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS3Layers.Catalog.DataAccess", "CSharpBase\src\TS3Layers\Catalog\TS3Layers.Catalog.DataAccess\TS3Layers.Catalog.DataAccess.csproj", "{2E4D53C0-CD8B-4FB0-BB96-572A02FCFF5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS3Layers.Catalog.Presentation", "CSharpBase\src\TS3Layers\Catalog\TS3Layers.Catalog.Presentation\TS3Layers.Catalog.Presentation.csproj", "{1144691C-C93A-470D-8E8F-FA003114CC50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS3Layers.Catalog.Presentation.Tests.Story", "CSharpBase\tests\TS3Layers\Catalog\TS3Layers.Catalog.Presentation.Tests.Story\TS3Layers.Catalog.Presentation.Tests.Story.csproj", "{17B46E5E-9F02-496B-B095-61BF5BD98246}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78449B6D-010F-40E1-9317-E7AD13AC78A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78449B6D-010F-40E1-9317-E7AD13AC78A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78449B6D-010F-40E1-9317-E7AD13AC78A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78449B6D-010F-40E1-9317-E7AD13AC78A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43FBF8AC-B7DA-4E9B-81EB-B6A11432CE20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43FBF8AC-B7DA-4E9B-81EB-B6A11432CE20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43FBF8AC-B7DA-4E9B-81EB-B6A11432CE20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43FBF8AC-B7DA-4E9B-81EB-B6A11432CE20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E4D53C0-CD8B-4FB0-BB96-572A02FCFF5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E4D53C0-CD8B-4FB0-BB96-572A02FCFF5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E4D53C0-CD8B-4FB0-BB96-572A02FCFF5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E4D53C0-CD8B-4FB0-BB96-572A02FCFF5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1144691C-C93A-470D-8E8F-FA003114CC50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1144691C-C93A-470D-8E8F-FA003114CC50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1144691C-C93A-470D-8E8F-FA003114CC50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1144691C-C93A-470D-8E8F-FA003114CC50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B46E5E-9F02-496B-B095-61BF5BD98246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B46E5E-9F02-496B-B095-61BF5BD98246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B46E5E-9F02-496B-B095-61BF5BD98246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B46E5E-9F02-496B-B095-61BF5BD98246}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CF6817F9-39C7-4419-B95B-7ACF9F75573B} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{4D0905FF-7A9E-40D2-9531-49540C1346EF} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{EF50AC7E-3B0B-4E93-B192-DD1838CC06D5} = {CF6817F9-39C7-4419-B95B-7ACF9F75573B}
+		{164FAFD6-8C94-47BA-9AA1-C8E81EFD0C81} = {4D0905FF-7A9E-40D2-9531-49540C1346EF}
+		{7B7C41E6-FC26-4DA1-A9E0-5DF309C1964B} = {EF50AC7E-3B0B-4E93-B192-DD1838CC06D5}
+		{DB8547BF-A7CE-4DAC-ACE0-76CCED546F57} = {164FAFD6-8C94-47BA-9AA1-C8E81EFD0C81}
+		{78449B6D-010F-40E1-9317-E7AD13AC78A7} = {EF50AC7E-3B0B-4E93-B192-DD1838CC06D5}
+		{43FBF8AC-B7DA-4E9B-81EB-B6A11432CE20} = {7B7C41E6-FC26-4DA1-A9E0-5DF309C1964B}
+		{2E4D53C0-CD8B-4FB0-BB96-572A02FCFF5A} = {7B7C41E6-FC26-4DA1-A9E0-5DF309C1964B}
+		{1144691C-C93A-470D-8E8F-FA003114CC50} = {7B7C41E6-FC26-4DA1-A9E0-5DF309C1964B}
+		{17B46E5E-9F02-496B-B095-61BF5BD98246} = {DB8547BF-A7CE-4DAC-ACE0-76CCED546F57}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9CF52F65-07D0-4D06-B813-6177B3867551}
+	EndGlobalSection
+EndGlobal
