@@ -1,6 +1,4 @@
 ﻿using Kanadeiar.Common.Functionals;
-using System.Xml.Linq;
-using TS3Layers.Catalog.Core.BrandModule;
 using TS3Layers.Catalog.Core.ProductModule;
 using TS3Layers.Catalog.DataAccess.Data;
 
@@ -11,6 +9,15 @@ public class ProductScript(ProductStorage storage)
     public Result<IEnumerable<ProductItem>> AllItems()
     {
         var items = storage.All().Select(ProductItem.Restore);
+
+        return Result.Ok(items);
+    }
+
+    public Result<IEnumerable<ProductItem>> Filter(string expectedName, int expectedBrandId, int expectedCategoryId)
+    {
+        var items = storage.All()
+            .Where(p => p.Name.StartsWith(expectedName) && p.BrandId == expectedBrandId && p.CategoryId == expectedCategoryId)
+            .Select(ProductItem.Restore);
 
         return Result.Ok(items);
     }

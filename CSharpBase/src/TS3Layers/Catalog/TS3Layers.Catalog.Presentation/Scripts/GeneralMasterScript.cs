@@ -26,7 +26,7 @@ public class GeneralMasterScript(ProductStorage productStorage, BrandStorage bra
         return Result.Ok();
     }
 
-    public Result<IEnumerable<string>> AllItems()
+    public Result<IEnumerable<string>> AllProducts()
     {
         var brands = brandStorage.All().ToDictionary(b => b.Id, BrandItem.Restore);
         var categories = categoryStorage.All().ToDictionary(b => b.Id, CategoryItem.Restore);
