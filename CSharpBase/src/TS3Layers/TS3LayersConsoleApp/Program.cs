@@ -15,7 +15,7 @@ script.InitDemo()
 ConsoleHelper.Pause();
 
 ConsoleHelper.PrintLine("Все элементы:");
-var items = script.AllItems()
+var items = script.AllProducts()
     .TryGetValue(fail => throw new ApplicationException(fail.Error));
 foreach (var text in items)
 {
