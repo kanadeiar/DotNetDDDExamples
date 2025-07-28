@@ -9,7 +9,8 @@ namespace TS3Layers.Catalog.Presentation.Tests.Story.Scripts;
 
 public class BrandScriptTests
 {
-    [Theory(DisplayName = "История: Как пользователь, я хочу просмотреть список всех брендов товаров, " +
+    [Theory(DisplayName = "История: Как пользователь, " +
+                          "я хочу просмотреть список всех брендов товаров, " +
                           "чтобы отфильтровать список товары по бренду.")]
     [AutoMoqData]
     public void StoryTestAllBrands(BrandStorage storage)

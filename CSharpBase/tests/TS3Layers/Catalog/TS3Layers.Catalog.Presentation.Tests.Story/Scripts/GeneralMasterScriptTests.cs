@@ -8,8 +8,9 @@ namespace TS3Layers.Catalog.Presentation.Tests.Story.Scripts;
 
 public class GeneralMasterScriptTests
 {
-    [Theory(DisplayName = "История: Как пользователь, я хочу просмотреть каталог всех товаров, " +
-                          "чтобы выбрать какой-либо из них.")]
+    [Theory(DisplayName = "История: Как пользователь, " +
+                          "я хочу просмотреть каталог всех товаров, " +
+                          "чтобы выбрать какой-либо из них для покупки.")]
     [AutoMoqData]
     public void StoryTestAllProducts(ProductStorage product, BrandStorage brand, CategoryStorage category)
     {

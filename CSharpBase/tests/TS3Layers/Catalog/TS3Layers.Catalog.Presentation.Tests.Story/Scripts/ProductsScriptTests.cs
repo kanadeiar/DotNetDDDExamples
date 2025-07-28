@@ -9,7 +9,8 @@ namespace TS3Layers.Catalog.Presentation.Tests.Story.Scripts;
 
 public class ProductsScriptTests
 {
-    [Theory(DisplayName = "История: Как пользователь, я могу отфильтровать товары по названию, бренду и категории," +
+    [Theory(DisplayName = "История: Как пользователь, " +
+                          "я могу отфильтровать товары по названию, бренду и категории," +
                           "для того, чтобы быстро найти нужный мне товар.")]
     [AutoMoqData]
     public void StoryTestFilter(ProductStorage storage)
@@ -29,7 +30,8 @@ public class ProductsScriptTests
         items.First().Entry().Id.Should().Be(expected.Id);
     }
 
-    [Theory(DisplayName = "История: Как администратор, я могу отредактировать любой товар в каталоге товаров, " +
+    [Theory(DisplayName = "История: Как администратор, " +
+                          "я могу отредактировать любой товар в каталоге товаров, " +
                           "чтобы поддерживать актуальное состояние каталога.")]
     [AutoMoqData]
     public void StoryTestEdit(ProductStorage storage)
@@ -50,7 +52,8 @@ public class ProductsScriptTests
         actuals.First().Price.Should().Be(expectedPrice);
     }
 
-    [Theory(DisplayName = "История: Как администратор, я могу удалить любой товар из каталоге, " +
+    [Theory(DisplayName = "История: Как администратор, " +
+                          "я могу удалить любой товар из каталоге, " +
                           "чтобы удалить уже проданные позиции.")]
     [AutoMoqData]
     public void StoryTestDelete(ProductStorage storage)

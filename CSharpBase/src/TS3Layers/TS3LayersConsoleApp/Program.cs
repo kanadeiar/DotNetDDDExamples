@@ -38,6 +38,4 @@ foreach (var text in categories)
     ConsoleHelper.PrintLine(text.ToString());
 }
 
-
-
 ConsoleHelper.PrintFooter();
