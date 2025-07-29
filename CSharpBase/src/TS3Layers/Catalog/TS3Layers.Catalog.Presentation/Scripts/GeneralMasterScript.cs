@@ -19,9 +19,9 @@ public class GeneralMasterScript(ProductStorage productStorage, BrandStorage bra
         var b2 = brands.AddItem("Adidas").TryGetValue(f => throw new ApplicationException());
         var b3 = brands.AddItem("Adidas").TryGetValue(f => throw new ApplicationException());
         var products = new ProductScript(productStorage);
-        products.AddItem("Шапка-ушанка", b1, c1, 100);
-        products.AddItem("Спортивная карта", b2, c2, 5000);
-        products.AddItem("Карсные штаны", b3, c3, 100);
+        products.AddItem("Шапка-ушанка", 100, b1, c1);
+        products.AddItem("Спортивная карта", 5000, b2, c2);
+        products.AddItem("Карсные штаны", 100, b3, c3);
 
         return Result.Ok();
     }
