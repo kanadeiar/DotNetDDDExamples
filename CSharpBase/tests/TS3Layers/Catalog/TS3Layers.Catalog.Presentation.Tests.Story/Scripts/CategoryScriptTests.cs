@@ -9,7 +9,8 @@ namespace TS3Layers.Catalog.Presentation.Tests.Story.Scripts;
 
 public class CategoryScriptTests
 {
-    [Theory(DisplayName = "История: Как пользователь, я хочу просмотреть список всех категорий товаров, " +
+    [Theory(DisplayName = "История: Как пользователь, " +
+                          "я хочу просмотреть список всех категорий товаров, " +
                           "чтобы отфильтровать список товары по категории.")]
     [AutoMoqData]
     public void StoryTestAllCategories(CategoryStorage storage)

@@ -1,7 +1,5 @@
 ﻿using Kanadeiar.Common.Functionals;
-using TS3Layers.Catalog.Core.BrandModule;
 using TS3Layers.Catalog.Core.CategoryModule;
-using TS3Layers.Catalog.Core.ProductModule;
 using TS3Layers.Catalog.DataAccess.Data;
 
 namespace TS3Layers.Catalog.Presentation.Scripts;

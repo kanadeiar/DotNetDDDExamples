@@ -22,14 +22,14 @@ public class ProductScript(ProductStorage storage)
         return Result.Ok(items);
     }
 
-    public Result<int> AddItem(string name, int brandId, int categoryId, decimal price)
+    public Result<int> AddItem(string name, decimal price, int brandId, int categoryId)
     {
         try
         {
             storage.BeginTransaction();
             var id = storage.NextIdentity();
 
-            var item = new ProductItem(id, name, brandId, categoryId, price);
+            var item = new ProductItem(id, name, price, brandId, categoryId);
 
             storage.Save(item.Entry());
             storage.Commit();

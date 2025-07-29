@@ -14,6 +14,11 @@ public static class GeneralApplicationHelper
         return new GeneralMasterScript(_productStorage, _brandStorage, _categoryStorage);
     }
 
+    public static ProductScript CreateScript()
+    {
+        return new ProductScript(_productStorage);
+    }
+
     public static CategoryScript CreateCategoryScript()
     {
         return new CategoryScript(_categoryStorage);
@@ -22,10 +27,5 @@ public static class GeneralApplicationHelper
     public static BrandScript CreateBrandScript()
     {
         return new BrandScript(_brandStorage);
-    }
-
-    public static ProductScript CreateScript()
-    {
-        return new ProductScript(_productStorage);
     }
 }

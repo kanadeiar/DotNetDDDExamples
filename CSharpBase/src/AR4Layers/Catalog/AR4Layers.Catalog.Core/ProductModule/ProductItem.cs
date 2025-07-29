@@ -1,7 +1,8 @@
-﻿using Kanadeiar.Common.Functionals;
-using TS3Layers.Catalog.DataAccess.Entries;
+﻿using AR4Layers.Catalog.DataAccess;
+using AR4Layers.Catalog.DataAccess.Entries;
+using Kanadeiar.Common.Functionals;
 
-namespace TS3Layers.Catalog.Core.ProductModule;
+namespace AR4Layers.Catalog.Core.ProductModule;
 
 public class ProductItem(int id, string name, decimal price, int brandId, int catalogId, bool isDeleted = false)
 {
@@ -17,25 +18,21 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
         .Require(id != 0, () => throw new ApplicationException("Идентификатор каталога должен быть задан"));
     private bool _isDeleted = isDeleted;
 
+    public static ProductItem Create(string name, decimal price, int brandId, int categoryId)
+    {
+        var id = Registry.ProductStorage.NextIdentity();
+
+        return new ProductItem(id, name, price, brandId, categoryId);
+    }
+
     public static ProductItem Restore(ProductEntry entry)
     {
         return new ProductItem(entry.Id, entry.Name, entry.Price, entry.BrandId, entry.CategoryId, entry.IsDeleted);
     }
 
-    public void Rename(string newName)
-    {
-        _name = newName;
-    }
 
-    public void ChangePrice(decimal newPrice)
-    {
-        _price = newPrice;
-    }
 
-    public void Delete()
-    {
-        _isDeleted = true;
-    }
+
 
     public ProductEntry Entry() =>
         new()
