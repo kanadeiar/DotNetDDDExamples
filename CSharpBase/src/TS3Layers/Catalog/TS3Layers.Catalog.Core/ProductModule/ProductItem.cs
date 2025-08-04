@@ -24,11 +24,15 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
 
     public void Rename(string newName)
     {
+        if (newName.Length is >= 3 and <= 300 == false) throw new ApplicationException("Новое название товара должно быть приемлемой длинны");
+
         _name = newName;
     }
 
     public void ChangePrice(decimal newPrice)
     {
+        if (newPrice is >= 0 and <= 10000 == false) throw new ApplicationException("Новая цена товара должна быть установлена от 0 до 10000");
+
         _price = newPrice;
     }
 
@@ -40,7 +44,7 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
     public ProductEntry Entry() =>
         new()
         {
-            Id = id,
+            Id = _id,
             Name = _name,
             Price = _price,
             BrandId = _brandId,

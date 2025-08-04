@@ -1,6 +1,90 @@
-﻿namespace AR4Layers.Catalog.Services.Services;
+﻿using AR4Layers.Catalog.Core.CategoryModule;
+using AR4Layers.Catalog.DataAccess;
+using Kanadeiar.Common.Functionals;
+
+namespace AR4Layers.Catalog.Services.Services;
 
 public class CategoryApplicationService
 {
+    public Result<IEnumerable<CategoryItem>> AllItems()
+    {
+        try
+        {
+            var items = Registry.CategoryStorage.All().Select(CategoryItem.Restore);
 
+            return Result.Ok(items);
+        }
+        catch (Exception e)
+        {
+            return Result.Fail<IEnumerable<CategoryItem>>("Не удалось получить все элементы. Ошибка: " + e);
+        }
+    }
+
+    public Result<int> AddItem(string name)
+    {
+        try
+        {
+            Registry.CategoryStorage.BeginTransaction();
+
+            var item = CategoryItem.Create(name);
+            var result = item.Add();
+
+            Registry.CategoryStorage.Commit();
+            return result switch
+            {
+                IFail fail => Result.Fail<int>(fail.Error),
+                not null => Result.Ok(item.Id),
+                _ => throw new IndexOutOfRangeException(nameof(result)),
+            };
+        }
+        catch (Exception e)
+        {
+            Registry.CategoryStorage.Rollback();
+            return Result.Fail<int>("Не удалось добавить элемент. Ошибка: " + e);
+        }
+    }
+
+    public Result ChangeName(int id, string newName)
+    {
+        try
+        {
+            Registry.CategoryStorage.BeginTransaction();
+            var entry = Registry.CategoryStorage.Load(id);
+            if (entry == null) return Result.Fail("Не удалось найти элемент.");
+            var item = CategoryItem.Restore(entry);
+
+            item.Rename(newName);
+
+            item.Save();
+            Registry.CategoryStorage.Commit();
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            Registry.CategoryStorage.Rollback();
+            return Result.Fail("Не удалось изменить название элемента. Ошибка: " + e);
+        }
+    }
+
+    public Result DeleteItem(int id)
+    {
+        try
+        {
+            Registry.CategoryStorage.BeginTransaction();
+            var entry = Registry.CategoryStorage.Load(id);
+            if (entry == null) return Result.Fail("Не удалось найти элемент.");
+            var item = CategoryItem.Restore(entry);
+
+            item.Delete();
+
+            item.Save();
+            Registry.CategoryStorage.Commit();
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            Registry.CategoryStorage.Rollback();
+            return Result.Fail("Не удалось удалить элемент. Ошибка: " + e);
+        }
+    }
 }

@@ -6,8 +6,6 @@ namespace AR4Layers.Catalog.Core.ProductModule;
 
 public class ProductItem(int id, string name, decimal price, int brandId, int catalogId, bool isDeleted = false)
 {
-    private readonly int _id = id
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
     private string _name = name
         .Require(name!.Length is >= 3 and <= 290, () => throw new ApplicationException("Название товара должно быть приемлемой длинны"));
     private decimal _price = price
@@ -17,6 +15,9 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
     private readonly int _catalogId = catalogId
         .Require(id != 0, () => throw new ApplicationException("Идентификатор каталога должен быть задан"));
     private bool _isDeleted = isDeleted;
+
+    public int Id { get; } = id
+        .Require(id != 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
 
     public static ProductItem Create(string name, decimal price, int brandId, int categoryId)
     {
@@ -30,11 +31,91 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
         return new ProductItem(entry.Id, entry.Name, entry.Price, entry.BrandId, entry.CategoryId, entry.IsDeleted);
     }
 
+    public void Rename(string newName)
+    {
+        if (newName.Length is >= 3 and <= 300 == false) throw new ApplicationException("Новое название товара должно быть приемлемой длинны");
 
+        _name = newName;
+    }
 
+    public void ChangePrice(decimal newPrice)
+    {
+        if (newPrice is >= 0 and <= 10000 == false) throw new ApplicationException("Новая цена товара должна быть установлена от 0 до 10000");
 
+        _price = newPrice;
+    }
 
-    public ProductEntry Entry() =>
+    public void Delete()
+    {
+        _isDeleted = true;
+    }
+
+    #region ActiveRecord
+
+    public static Result<ProductItem> Find(int id)
+    {
+        try
+        {
+            var entry = Registry.ProductStorage.Load(id);
+            if (entry is null) return Result.Fail<ProductItem>($"Элемент с идентификатором {id} не найден");
+
+            var result = new ProductItem(entry.Id,
+                entry.Name,
+                entry.Price,
+                entry.BrandId,
+                entry.CategoryId,
+                entry.IsDeleted);
+
+            return Result.Ok(result);
+        }
+        catch (Exception e)
+        {
+            return Result.Fail<ProductItem>("Не удалось найти элемент. Ошибка: " + e);
+        }
+    }
+
+    public Result Add()
+    {
+        try
+        {
+            var entity = new ProductEntry
+            {
+                Id = Id,
+                Name = name,
+            };
+
+            Registry.ProductStorage.Save(entity);
+
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            return Result.Fail("Не удалось добавить элемент. Ошибка: " + e);
+        }
+    }
+
+    public Result Save()
+    {
+        try
+        {
+            var entry = Registry.ProductStorage.Load(Id);
+            if (entry is null) return Result.Fail($"Элемент с идентификатором {Id} не найден");
+
+            var entity = this.entry();
+
+            Registry.ProductStorage.Save(entity);
+
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            return Result.Fail("Не удалось добавить элемент. Ошибка: " + e);
+        }
+    }
+
+    #endregion
+
+    private ProductEntry entry() =>
         new()
         {
             Id = id,
