@@ -1,6 +1,6 @@
-﻿using AR4Layers.Catalog.DataAccess;
-using AR4Layers.Catalog.DataAccess.Data;
+﻿using AR4Layers.Catalog.DataAccess.Data;
 using AR4Layers.Catalog.DataAccess.Entries;
+using AR4Layers.Catalog.DataAccess.Registries;
 using AR4Layers.Catalog.Presentation.Scripts;
 using FluentAssertions;
 using Kanadeiar.Common.Functionals;
@@ -18,7 +18,7 @@ public class CategoryScriptTests
     {
         var expected = "Категория";
         storage.Save(new CategoryEntry { Id = 1, Name = expected });
-        Registry.InitFake(new FakeRegistry { FakeCategoryStorage = storage });
+        DataRegistry.InitFake(storage);
         var sut = new CategoryScript();
 
         var items = sut.AllItems()

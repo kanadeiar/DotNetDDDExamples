@@ -1,6 +1,6 @@
-﻿using AR4Layers.Catalog.DataAccess;
-using AR4Layers.Catalog.DataAccess.Data;
+﻿using AR4Layers.Catalog.DataAccess.Data;
 using AR4Layers.Catalog.DataAccess.Entries;
+using AR4Layers.Catalog.DataAccess.Registries;
 using AR4Layers.Catalog.Services.Services;
 using AutoFixture.Xunit2;
 using FluentAssertions;
@@ -17,7 +17,7 @@ public class CategoryApplicationServiceTests
         var storage = new CategoryStorage();
         entry = new CategoryEntry { Id = storage.NextIdentity(), Name = entry.Name };
         storage.Save(entry);
-        Registry.InitFake(new FakeRegistry { FakeCategoryStorage = storage });
+        DataRegistry.InitFake(storage);
         var sut = new CategoryApplicationService();
 
         var items = sut.AllItems()
@@ -33,7 +33,7 @@ public class CategoryApplicationServiceTests
     public void TestCreateNewCategoryItem(string name)
     {
         var storage = new CategoryStorage();
-        Registry.InitFake(new FakeRegistry() { FakeCategoryStorage = storage });
+        DataRegistry.InitFake(storage);
         var sut = new CategoryApplicationService();
 
         sut.AddItem(name);
@@ -45,13 +45,13 @@ public class CategoryApplicationServiceTests
 
     [Theory(DisplayName = "Проверка возможности изменения названия элемента")]
     [AutoData]
-    public void TestChangeNameOfBrandItem(CategoryEntry entry)
+    public void TestChangeNameOfCategoryItem(CategoryEntry entry)
     {
         var expected = "newName";
         var storage = new CategoryStorage();
         entry = new CategoryEntry { Id = storage.NextIdentity(), Name = entry.Name };
         storage.Save(entry);
-        Registry.InitFake(new FakeRegistry { FakeCategoryStorage = storage });
+        DataRegistry.InitFake(storage);
         var sut = new CategoryApplicationService();
 
         var result = sut.ChangeName(entry.Id, expected);
@@ -63,12 +63,12 @@ public class CategoryApplicationServiceTests
 
     [Theory(DisplayName = "Проверка возможности удаления элемента")]
     [AutoData]
-    public void TestDeleteBrandItem(CategoryEntry entry)
+    public void TestDeleteCategoryItem(CategoryEntry entry)
     {
         var storage = new CategoryStorage();
         entry = new CategoryEntry { Id = storage.NextIdentity(), Name = entry.Name };
         storage.Save(entry);
-        Registry.InitFake(new FakeRegistry { FakeCategoryStorage = storage });
+        DataRegistry.InitFake(storage);
         var sut = new CategoryApplicationService();
 
         var result = sut.DeleteItem(entry.Id);

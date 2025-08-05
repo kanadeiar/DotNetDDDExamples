@@ -1,5 +1,5 @@
 ﻿using AR4Layers.Catalog.Core.BrandModule;
-using AR4Layers.Catalog.DataAccess;
+using AR4Layers.Catalog.DataAccess.Registries;
 using Kanadeiar.Common.Functionals;
 
 namespace AR4Layers.Catalog.Services.Services;
@@ -10,7 +10,7 @@ public class BrandApplicationService
     {
         try
         {
-            var items = Registry.BrandStorage.All().Select(BrandItem.Restore);
+            var items = DataRegistry.BrandStorage.All().Select(BrandItem.Restore);
 
             return Result.Ok(items);
         }
@@ -24,12 +24,12 @@ public class BrandApplicationService
     {
         try
         {
-            Registry.BrandStorage.BeginTransaction();
+            DataRegistry.BrandStorage.BeginTransaction();
 
             var item = BrandItem.Create(name);
             var result = item.Add();
 
-            Registry.BrandStorage.Commit();
+            DataRegistry.BrandStorage.Commit();
             return result switch
             {
                 IFail fail => Result.Fail<int>(fail.Error),
@@ -39,7 +39,7 @@ public class BrandApplicationService
         }
         catch (Exception e)
         {
-            Registry.BrandStorage.Rollback();
+            DataRegistry.BrandStorage.Rollback();
             return Result.Fail<int>("Не удалось добавить элемент. Ошибка: " + e);
         }
     }
@@ -48,20 +48,20 @@ public class BrandApplicationService
     {
         try
         {
-            Registry.BrandStorage.BeginTransaction();
-            var entry = Registry.BrandStorage.Load(id);
+            DataRegistry.BrandStorage.BeginTransaction();
+            var entry = DataRegistry.BrandStorage.Load(id);
             if (entry == null) return Result.Fail("Не удалось найти элемент.");
             var item = BrandItem.Restore(entry);
 
             item.Rename(newName);
 
             item.Save();
-            Registry.BrandStorage.Commit();
+            DataRegistry.BrandStorage.Commit();
             return Result.Ok();
         }
         catch (Exception e)
         {
-            Registry.BrandStorage.Rollback();
+            DataRegistry.BrandStorage.Rollback();
             return Result.Fail("Не удалось изменить название элемента. Ошибка: " + e);
         }
     }
@@ -70,20 +70,20 @@ public class BrandApplicationService
     {
         try
         {
-            Registry.BrandStorage.BeginTransaction();
-            var entry = Registry.BrandStorage.Load(id);
+            DataRegistry.BrandStorage.BeginTransaction();
+            var entry = DataRegistry.BrandStorage.Load(id);
             if (entry == null) return Result.Fail("Не удалось найти элемент.");
             var item = BrandItem.Restore(entry);
 
             item.Delete();
 
             item.Save();
-            Registry.BrandStorage.Commit();
+            DataRegistry.BrandStorage.Commit();
             return Result.Ok();
         }
         catch (Exception e)
         {
-            Registry.BrandStorage.Rollback();
+            DataRegistry.BrandStorage.Rollback();
             return Result.Fail("Не удалось удалить элемент. Ошибка: " + e);
         }
     }

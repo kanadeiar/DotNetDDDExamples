@@ -12,9 +12,9 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
     private decimal _price = price
         .Require(price is >= 0 and <= 10000, () => throw new ApplicationException("Цена товара должна быть установлена от 0 до 10000"));
     private readonly int _brandId = brandId
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор бренда должен быть задан"));
+        .Require(brandId != 0, () => throw new ApplicationException("Идентификатор бренда должен быть задан"));
     private readonly int _catalogId = catalogId
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор каталога должен быть задан"));
+        .Require(catalogId != 0, () => throw new ApplicationException("Идентификатор каталога должен быть задан"));
     private bool _isDeleted = isDeleted;
 
     public static ProductItem Restore(ProductEntry entry)

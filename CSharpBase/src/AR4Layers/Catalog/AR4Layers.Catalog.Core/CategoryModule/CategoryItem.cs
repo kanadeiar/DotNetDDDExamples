@@ -1,5 +1,6 @@
 ﻿using AR4Layers.Catalog.DataAccess;
 using AR4Layers.Catalog.DataAccess.Entries;
+using AR4Layers.Catalog.DataAccess.Registries;
 using Kanadeiar.Common.Functionals;
 
 namespace AR4Layers.Catalog.Core.CategoryModule;
@@ -15,7 +16,7 @@ public class CategoryItem(int id, string name, bool isDeleted = false)
 
     public static CategoryItem Create(string name)
     {
-        var id = Registry.ProductStorage.NextIdentity();
+        var id = DataRegistry.ProductStorage.NextIdentity();
 
         return new CategoryItem(id, name);
     }
@@ -43,7 +44,7 @@ public class CategoryItem(int id, string name, bool isDeleted = false)
     {
         try
         {
-            var entry = Registry.BrandStorage.Load(id);
+            var entry = DataRegistry.BrandStorage.Load(id);
             if (entry is null) return Result.Fail<CategoryItem>($"Элемент с идентификатором {id} не найден");
 
             var result = new CategoryItem(entry.Id,
@@ -62,13 +63,9 @@ public class CategoryItem(int id, string name, bool isDeleted = false)
     {
         try
         {
-            var entity = new CategoryEntry()
-            {
-                Id = Id,
-                Name = name,
-            };
+            var entity = Entry();
 
-            Registry.CategoryStorage.Save(entity);
+            DataRegistry.CategoryStorage.Save(entity);
 
             return Result.Ok();
         }
@@ -82,12 +79,12 @@ public class CategoryItem(int id, string name, bool isDeleted = false)
     {
         try
         {
-            var entry = Registry.CategoryStorage.Load(Id);
+            var entry = DataRegistry.CategoryStorage.Load(Id);
             if (entry is null) return Result.Fail($"Элемент с идентификатором {Id} не найден");
 
-            var entity = this.entry();
+            var entity = this.Entry();
 
-            Registry.CategoryStorage.Save(entity);
+            DataRegistry.CategoryStorage.Save(entity);
 
             return Result.Ok();
         }
@@ -99,7 +96,7 @@ public class CategoryItem(int id, string name, bool isDeleted = false)
 
     #endregion
 
-    private CategoryEntry entry() =>
+    public CategoryEntry Entry() =>
         new()
         {
             Id = id,

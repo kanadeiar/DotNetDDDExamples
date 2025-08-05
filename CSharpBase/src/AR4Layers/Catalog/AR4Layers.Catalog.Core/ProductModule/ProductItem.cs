@@ -1,5 +1,5 @@
-﻿using AR4Layers.Catalog.DataAccess;
-using AR4Layers.Catalog.DataAccess.Entries;
+﻿using AR4Layers.Catalog.DataAccess.Entries;
+using AR4Layers.Catalog.DataAccess.Registries;
 using Kanadeiar.Common.Functionals;
 
 namespace AR4Layers.Catalog.Core.ProductModule;
@@ -11,9 +11,9 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
     private decimal _price = price
         .Require(price is >= 0 and <= 10000, () => throw new ApplicationException("Цена товара должна быть установлена от 0 до 10000"));
     private readonly int _brandId = brandId
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор бренда должен быть задан"));
+        .Require(brandId != 0, () => throw new ApplicationException("Идентификатор бренда должен быть задан"));
     private readonly int _catalogId = catalogId
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор каталога должен быть задан"));
+        .Require(catalogId != 0, () => throw new ApplicationException("Идентификатор каталога должен быть задан"));
     private bool _isDeleted = isDeleted;
 
     public int Id { get; } = id
@@ -21,7 +21,7 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
 
     public static ProductItem Create(string name, decimal price, int brandId, int categoryId)
     {
-        var id = Registry.ProductStorage.NextIdentity();
+        var id = DataRegistry.ProductStorage.NextIdentity();
 
         return new ProductItem(id, name, price, brandId, categoryId);
     }
@@ -56,7 +56,7 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
     {
         try
         {
-            var entry = Registry.ProductStorage.Load(id);
+            var entry = DataRegistry.ProductStorage.Load(id);
             if (entry is null) return Result.Fail<ProductItem>($"Элемент с идентификатором {id} не найден");
 
             var result = new ProductItem(entry.Id,
@@ -78,14 +78,10 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
     {
         try
         {
-            var entity = new ProductEntry
-            {
-                Id = Id,
-                Name = name,
-            };
+            var entity = Entry();
 
-            Registry.ProductStorage.Save(entity);
-
+            DataRegistry.ProductStorage.Save(entity);
+                
             return Result.Ok();
         }
         catch (Exception e)
@@ -98,12 +94,12 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
     {
         try
         {
-            var entry = Registry.ProductStorage.Load(Id);
+            var entry = DataRegistry.ProductStorage.Load(Id);
             if (entry is null) return Result.Fail($"Элемент с идентификатором {Id} не найден");
 
-            var entity = this.entry();
+            var entity = this.Entry();
 
-            Registry.ProductStorage.Save(entity);
+            DataRegistry.ProductStorage.Save(entity);
 
             return Result.Ok();
         }
@@ -115,7 +111,7 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
 
     #endregion
 
-    private ProductEntry entry() =>
+    public ProductEntry Entry() =>
         new()
         {
             Id = id,

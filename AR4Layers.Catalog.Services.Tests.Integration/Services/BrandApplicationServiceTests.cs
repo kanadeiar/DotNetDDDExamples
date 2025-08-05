@@ -1,6 +1,6 @@
-﻿using AR4Layers.Catalog.DataAccess;
-using AR4Layers.Catalog.DataAccess.Data;
+﻿using AR4Layers.Catalog.DataAccess.Data;
 using AR4Layers.Catalog.DataAccess.Entries;
+using AR4Layers.Catalog.DataAccess.Registries;
 using AR4Layers.Catalog.Services.Services;
 using AutoFixture.Xunit2;
 using FluentAssertions;
@@ -17,7 +17,7 @@ public class BrandApplicationServiceTests
         var storage = new BrandStorage();
         entry = new BrandEntry { Id = storage.NextIdentity(), Name = entry.Name };
         storage.Save(entry);
-        Registry.InitFake(new FakeRegistry { FakeBrandStorage = storage });
+        DataRegistry.InitFake(storage);
         var sut = new BrandApplicationService();
 
         var items = sut.AllItems()
@@ -33,11 +33,12 @@ public class BrandApplicationServiceTests
     public void TestCreateNewBrandItem(string name)
     {
         var storage = new BrandStorage();
-        Registry.InitFake(new FakeRegistry() { FakeBrandStorage = storage });
+        DataRegistry.InitFake(storage);
         var sut = new BrandApplicationService();
 
-        sut.AddItem(name);
+        var result = sut.AddItem(name);
 
+        result.Should().BeOfType<Result<int>>();
         storage.All().Count().Should().Be(1);
         var first = storage.All().First();
         first.Name.Should().Be(name);
@@ -51,7 +52,7 @@ public class BrandApplicationServiceTests
         var storage = new BrandStorage();
         entry = new BrandEntry { Id = storage.NextIdentity(), Name = entry.Name };
         storage.Save(entry);
-        Registry.InitFake(new FakeRegistry { FakeBrandStorage = storage });
+        DataRegistry.InitFake(storage);
         var sut = new BrandApplicationService();
 
         var result = sut.ChangeName(entry.Id, expected);
@@ -68,7 +69,7 @@ public class BrandApplicationServiceTests
         var storage = new BrandStorage();
         entry = new BrandEntry { Id = storage.NextIdentity(), Name = entry.Name };
         storage.Save(entry);
-        Registry.InitFake(new FakeRegistry { FakeBrandStorage = storage });
+        DataRegistry.InitFake(storage);
         var sut = new BrandApplicationService();
 
         var result = sut.DeleteItem(entry.Id);
