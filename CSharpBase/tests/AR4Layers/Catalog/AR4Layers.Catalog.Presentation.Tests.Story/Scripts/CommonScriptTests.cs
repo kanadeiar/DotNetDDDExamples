@@ -1,12 +1,14 @@
-﻿using FluentAssertions;
+﻿using AR4Layers.Catalog.DataAccess.Data;
+using AR4Layers.Catalog.DataAccess.Registries;
+using AR4Layers.Catalog.Presentation.Scripts;
+using FluentAssertions;
 using Kanadeiar.Common.Functionals;
 using Kanadeiar.Common.Tests;
-using TS3Layers.Catalog.DataAccess.Data;
-using TS3Layers.Catalog.Presentation.Scripts;
 
-namespace TS3Layers.Catalog.Presentation.Tests.Story.Scripts;
+namespace AR4Layers.Catalog.Presentation.Tests.Story.Scripts;
 
-public class GeneralMasterScriptTests
+[Collection(nameof(SystemTestCollectionDefinition))]
+public class CommonScriptTests
 {
     [Theory(DisplayName = "История: Как пользователь, " +
                           "я хочу просмотреть каталог всех товаров, " +
@@ -15,7 +17,10 @@ public class GeneralMasterScriptTests
     public void StoryTestAllProducts(ProductStorage product, BrandStorage brand, CategoryStorage category)
     {
         var expected = "Шапки Adidas - Шапка-ушанка - 100 руб.";
-        var sut = new GeneralMasterScript(product, brand, category);
+        var sut = new CommonScript();
+        DataRegistry.InitFake(product);
+        DataRegistry.InitFake(brand);
+        DataRegistry.InitFake(category);
         sut.InitDemo().Should().BeOfType<Result>();
 
         var items = sut.AllProducts()
@@ -26,3 +31,6 @@ public class GeneralMasterScriptTests
         items.First().Should().Be(expected);
     }
 }
+
+[CollectionDefinition(nameof(SystemTestCollectionDefinition), DisableParallelization = true)]
+public class SystemTestCollectionDefinition { }

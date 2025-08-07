@@ -5,13 +5,13 @@ namespace TS3LayersConsoleApp.Helpers;
 
 public static class GeneralApplicationHelper
 {
-    private static readonly CategoryStorage _categoryStorage = new CategoryStorage();
-    private static readonly BrandStorage _brandStorage = new BrandStorage();
-    private static readonly ProductStorage _productStorage = new ProductStorage();
+    private static readonly CategoryStorage _categoryStorage = new();
+    private static readonly BrandStorage _brandStorage = new();
+    private static readonly ProductStorage _productStorage = new();
 
-    public static GeneralMasterScript CreateGeneralScript()
+    public static CommonScript CreateGeneralScript()
     {
-        return new GeneralMasterScript(_productStorage, _brandStorage, _categoryStorage);
+        return new CommonScript(_productStorage, _brandStorage, _categoryStorage);
     }
 
     public static ProductScript CreateScript()

@@ -31,7 +31,7 @@ public class CategoryItem(int id, string name, bool isDeleted = false)
     public CategoryEntry Entry() =>
         new()
         {
-            Id = id,
+            Id = _id,
             Name = _name,
             IsDeleted = _isDeleted,
         };

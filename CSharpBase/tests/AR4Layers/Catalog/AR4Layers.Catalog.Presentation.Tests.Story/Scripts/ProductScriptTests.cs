@@ -1,23 +1,25 @@
-﻿using FluentAssertions;
+﻿using AR4Layers.Catalog.DataAccess.Data;
+using AR4Layers.Catalog.DataAccess.Entries;
+using AR4Layers.Catalog.DataAccess.Registries;
+using AR4Layers.Catalog.Presentation.Scripts;
+using FluentAssertions;
 using Kanadeiar.Common.Functionals;
 using Kanadeiar.Common.Tests;
-using TS3Layers.Catalog.DataAccess.Data;
-using TS3Layers.Catalog.DataAccess.Entries;
-using TS3Layers.Catalog.Presentation.Scripts;
 
-namespace TS3Layers.Catalog.Presentation.Tests.Story.Scripts;
+namespace AR4Layers.Catalog.Presentation.Tests.Story.Scripts;
 
-public class ProductsScriptTests
+public class ProductScriptTests
 {
     [Theory(DisplayName = "История: Как пользователь, " +
                           "я хочу просмотреть список всех товаров, " +
                           "чтобы просмотреть все доступные товары.")]
     [AutoMoqData]
-    public void StoryTestAllProducts(ProductStorage storage)
+    public void StoryTestsAllItems(ProductStorage storage)
     {
         var expected = "Товар";
         storage.Save(new ProductEntry { Id = 1, Name = expected, Price = 11, BrandId = 1, CategoryId = 1 });
-        var sut = new ProductScript(storage);
+        DataRegistry.InitFake(storage);
+        var sut = new ProductScript();
 
         var items = sut.AllItems()
             .Throw(() => throw new ApplicationException())
@@ -28,7 +30,7 @@ public class ProductsScriptTests
     }
 
     [Theory(DisplayName = "История: Как пользователь, " +
-                          "я могу отфильтровать товары по названию, бренду и категории," +
+                          "я могу отфильтровать товары по названию, бренду и категории," + 
                           "для того, чтобы быстро найти нужный мне товар.")]
     [AutoMoqData]
     public void StoryTestFilter(ProductStorage storage)
@@ -38,7 +40,8 @@ public class ProductsScriptTests
         storage.Save(expected);
         storage.Save(new ProductEntry { Id = 3, Name = "Суперимя", Price = 11, BrandId = 1, CategoryId = 8 });
         storage.Save(new ProductEntry { Id = 3, Name = "Имя", Price = 11, BrandId = 4, CategoryId = 8 });
-        var sut = new ProductScript(storage);
+        DataRegistry.InitFake(storage);
+        var sut = new ProductScript();
 
         var items = sut.Filter(expected.Name, expected.BrandId, expected.CategoryId)
             .Throw(_ => throw new ApplicationException())
@@ -57,7 +60,8 @@ public class ProductsScriptTests
         storage.Save(new ProductEntry { Id = 1, Name = "Демо", Price = 11, BrandId = 1, CategoryId = 1 });
         var expectedName = "Новое название";
         var expectedPrice = 3000;
-        var sut = new ProductScript(storage);
+        DataRegistry.InitFake(storage);
+        var sut = new ProductScript();
 
         var result = sut.ChangeName(1, expectedName);
         var resultTwo = sut.ChangePrice(1, expectedPrice);
@@ -79,7 +83,8 @@ public class ProductsScriptTests
         var expectedName = "Обычный товар";
         storage.Save(new ProductEntry { Id = 1, Name = "Демо", Price = 11, BrandId = 1, CategoryId = 1 });
         storage.Save(new ProductEntry { Id = 2, Name = expectedName, Price = 11, BrandId = 1, CategoryId = 1 });
-        var sut = new ProductScript(storage);
+        DataRegistry.InitFake(storage);
+        var sut = new ProductScript();
 
         var result = sut.DeleteItem(1);
 
@@ -88,4 +93,5 @@ public class ProductsScriptTests
         actuals.Count().Should().Be(1);
         actuals.First().Name.Should().Be(expectedName);
     }
+
 }

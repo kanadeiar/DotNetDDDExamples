@@ -6,7 +6,7 @@ using TS3Layers.Catalog.DataAccess.Data;
 
 namespace TS3Layers.Catalog.Presentation.Scripts;
 
-public class GeneralMasterScript(ProductStorage productStorage, BrandStorage brandStorage, CategoryStorage categoryStorage)
+public class CommonScript(ProductStorage productStorage, BrandStorage brandStorage, CategoryStorage categoryStorage)
 {
     public Result InitDemo()
     {
@@ -33,7 +33,7 @@ public class GeneralMasterScript(ProductStorage productStorage, BrandStorage bra
 
         var items = productStorage.All()
             .Select(e => new { e, p = ProductItem.Restore(e) })
-            .Select(tuple => $"{categories[tuple.e.CategoryId]} {brands[tuple.e.CategoryId]} - {tuple.p.FullText()}");
+            .Select(tuple => $"{categories[tuple.e.CategoryId]} {brands[tuple.e.BrandId]} - {tuple.p.FullText()}");
 
         return Result.Ok(items);
     }
