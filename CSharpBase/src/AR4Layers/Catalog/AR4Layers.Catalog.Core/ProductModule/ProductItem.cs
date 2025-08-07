@@ -4,7 +4,7 @@ using Kanadeiar.Common.Functionals;
 
 namespace AR4Layers.Catalog.Core.ProductModule;
 
-public class ProductItem(int id, string name, decimal price, int brandId, int catalogId, bool isDeleted = false)
+public class ProductItem(int id, string name, decimal price, int brandId, int categoryId, bool isDeleted = false)
 {
     private string _name = name
         .Require(name!.Length is >= 3 and <= 290, () => throw new ApplicationException("Название товара должно быть приемлемой длинны"));
@@ -12,8 +12,8 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
         .Require(price is >= 0 and <= 10000, () => throw new ApplicationException("Цена товара должна быть установлена от 0 до 10000"));
     private readonly int _brandId = brandId
         .Require(brandId != 0, () => throw new ApplicationException("Идентификатор бренда должен быть задан"));
-    private readonly int _catalogId = catalogId
-        .Require(catalogId != 0, () => throw new ApplicationException("Идентификатор каталога должен быть задан"));
+    private readonly int _categoryId = categoryId
+        .Require(categoryId != 0, () => throw new ApplicationException("Идентификатор каталога должен быть задан"));
     private bool _isDeleted = isDeleted;
 
     public int Id { get; } = id
@@ -50,6 +50,9 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
         _isDeleted = true;
     }
 
+    public bool Filter(string name, int brandId, int categoryId) =>
+        _name.StartsWith(name) && _brandId == brandId && _categoryId == categoryId;
+
     #region ActiveRecord
 
     public static Result<ProductItem> Find(int id)
@@ -73,7 +76,7 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
             return Result.Fail<ProductItem>("Не удалось найти элемент. Ошибка: " + e);
         }
     }
-
+    
     public Result Add()
     {
         try
@@ -118,7 +121,7 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
             Name = _name,
             Price = _price,
             BrandId = _brandId,
-            CategoryId = _catalogId,
+            CategoryId = _categoryId,
             IsDeleted = _isDeleted,
         };
 

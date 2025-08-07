@@ -17,9 +17,7 @@ public class ProductScript
     {
         var items = _service.AllItems()
             .Throw(f => throw new ApplicationException())
-            .Select(p => p.Entry())
-            .Where(p => p.Name.StartsWith(name) && p.BrandId == brandId && p.CategoryId == categoryId)
-            .Select(ProductItem.Restore);
+            .Where(p => p.Filter(name, brandId, categoryId));
 
         return Result.Ok(items);
     }
