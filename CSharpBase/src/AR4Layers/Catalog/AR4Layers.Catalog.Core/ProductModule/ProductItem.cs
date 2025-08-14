@@ -50,8 +50,24 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
         _isDeleted = true;
     }
 
-    public bool Filter(string name, int brandId, int categoryId) =>
-        _name.StartsWith(name) && _brandId == brandId && _categoryId == categoryId;
+    public bool Filter(string name = "", int brandId = 0, int categoryId = 0)
+    {
+        List<Func<bool>> actions = new ();
+        if (string.IsNullOrEmpty(name) == false)
+        {
+            actions.Add(() => _name.StartsWith(name));
+        }
+        if (brandId > 0)
+        {
+            actions.Add(() => _brandId == brandId);
+        }
+        if (categoryId > 0)
+        {
+            actions.Add(() => _categoryId == categoryId);
+        }
+
+        return actions.All(act => act.Invoke());
+    }
 
     #region ActiveRecord
 

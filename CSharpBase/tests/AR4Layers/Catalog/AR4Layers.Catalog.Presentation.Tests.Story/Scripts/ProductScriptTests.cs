@@ -39,7 +39,7 @@ public class ProductScriptTests
         storage.Save(new ProductEntry { Id = 1, Name = "Суперимя", Price = 131, BrandId = 4, CategoryId = 1 });
         storage.Save(expected);
         storage.Save(new ProductEntry { Id = 3, Name = "Суперимя", Price = 11, BrandId = 1, CategoryId = 8 });
-        storage.Save(new ProductEntry { Id = 3, Name = "Имя", Price = 11, BrandId = 4, CategoryId = 8 });
+        storage.Save(new ProductEntry { Id = 4, Name = "Имя", Price = 11, BrandId = 4, CategoryId = 8 });
         DataRegistry.InitFake(storage);
         var sut = new ProductScript();
 
@@ -50,6 +50,43 @@ public class ProductScriptTests
         items.Length.Should().Be(1);
         items.First().Entry().Id.Should().Be(expected.Id);
     }
+
+    [Theory(DisplayName = "История: Как пользователь, " +
+                          "я могу как угодно отфильтровать товары как по названию, по бренду, так и по категории," +
+                          "для того, чтобы быстро найти нужный мне товар.")]
+    [AutoMoqData]
+    public void StoryTestFilter_WhenOr(ProductStorage storage)
+    {
+        var expected = new ProductEntry { Id = 2, Name = "Суперимя", Price = 311, BrandId = 4, CategoryId = 8 };
+        storage.Save(new ProductEntry { Id = 1, Name = "Суперимя", Price = 131, BrandId = 4, CategoryId = 1 });
+        storage.Save(expected);
+        storage.Save(new ProductEntry { Id = 3, Name = "Суперимя", Price = 11, BrandId = 1, CategoryId = 8 });
+        storage.Save(new ProductEntry { Id = 4, Name = "Имя", Price = 11, BrandId = 4, CategoryId = 8 });
+        DataRegistry.InitFake(storage);
+        var sut = new ProductScript();
+
+        var items = sut.Filter(expected.Name)
+            .Throw(_ => throw new ApplicationException())
+            .ToArray();
+
+        items.Length.Should().Be(3);
+        items.First().Entry().Id.Should().Be(1);
+
+        items = sut.Filter(brandId: expected.BrandId)
+            .Throw(_ => throw new ApplicationException())
+            .ToArray();
+
+        items.Length.Should().Be(3);
+        items.First().Entry().Id.Should().Be(1);
+
+        items = sut.Filter(categoryId: expected.CategoryId)
+            .Throw(_ => throw new ApplicationException())
+            .ToArray();
+
+        items.Length.Should().Be(3);
+        items.First().Entry().Id.Should().Be(expected.Id);
+    }
+
 
     [Theory(DisplayName = "История: Как администратор, " +
                           "я могу отредактировать любой товар в каталоге товаров, " +
