@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSharpBase\src\AR4Layers\Catalog\AR4Layers.Catalog.Services\AR4Layers.Catalog.Services.csproj" />
+    <ProjectReference Include="..\..\..\..\src\AR4Layers\Catalog\AR4Layers.Catalog.Services\AR4Layers.Catalog.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
