@@ -1,6 +1,6 @@
-﻿using TS3Layers.Catalog.DataAccess.Entries;
+﻿using TSEasy.Catalog.DataAccess.Entries;
 
-namespace TS3Layers.Catalog.DataAccess.Data;
+namespace TSEasy.Catalog.DataAccess;
 
 public class BrandStorage
 {
@@ -8,7 +8,7 @@ public class BrandStorage
     private int _lastId;
 
     public int NextIdentity() => ++_lastId;
-    
+
     public IEnumerable<BrandEntry> All(bool withDeleted = false) => _entries.Values.Where(e => withDeleted || !e.IsDeleted);
 
     public BrandEntry? Load(int id) => _entries.GetValueOrDefault(id);

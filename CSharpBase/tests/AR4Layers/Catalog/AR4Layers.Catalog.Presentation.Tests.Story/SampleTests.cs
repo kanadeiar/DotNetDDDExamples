@@ -89,7 +89,7 @@ public class SampleTests
 
     public interface ISample
     {
-        string Name { get; set; }
+        string? Name { get; set; }
     }
 
     public class Sample : ISample

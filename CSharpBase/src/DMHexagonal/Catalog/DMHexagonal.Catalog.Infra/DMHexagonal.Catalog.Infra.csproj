@@ -10,4 +10,9 @@
     <ProjectReference Include="..\DMHexagonal.Catalog.Application\DMHexagonal.Catalog.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Adapters\" />
+    <Folder Include="Tools\" />
+  </ItemGroup>
+
 </Project>

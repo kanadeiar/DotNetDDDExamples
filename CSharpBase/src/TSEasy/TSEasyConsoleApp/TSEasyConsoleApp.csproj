@@ -13,4 +13,8 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Catalog\TSEasy.Catalog\TSEasy.Catalog.csproj" />
+  </ItemGroup>
+
 </Project>

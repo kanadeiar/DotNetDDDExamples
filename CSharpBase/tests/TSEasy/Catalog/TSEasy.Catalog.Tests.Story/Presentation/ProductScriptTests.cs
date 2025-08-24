@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
 using Kanadeiar.Common.Functionals;
 using Kanadeiar.Common.Tests;
-using TS3Layers.Catalog.DataAccess.Data;
-using TS3Layers.Catalog.DataAccess.Entries;
-using TS3Layers.Catalog.Presentation.Scripts;
+using TSEasy.Catalog.DataAccess;
+using TSEasy.Catalog.DataAccess.Entries;
+using TSEasy.Catalog.Presentation;
 
-namespace TS3Layers.Catalog.Presentation.Tests.Story.Scripts;
+namespace TSEasy.Catalog.Tests.Story.Presentation;
 
-public class ProductsScriptTests
+public class ProductScriptTests
 {
     [Theory(DisplayName = "История: Как пользователь, " +
                           "я хочу просмотреть список всех товаров, " +

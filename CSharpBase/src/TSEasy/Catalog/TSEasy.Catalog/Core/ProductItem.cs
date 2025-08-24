@@ -1,7 +1,7 @@
 ﻿using Kanadeiar.Common.Functionals;
-using TS3Layers.Catalog.DataAccess.Entries;
+using TSEasy.Catalog.DataAccess.Entries;
 
-namespace TS3Layers.Catalog.Core.ProductModule;
+namespace TSEasy.Catalog.Core;
 
 public class ProductItem(int id, string name, decimal price, int brandId, int categoryId, bool isDeleted = false)
 {
