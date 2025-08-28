@@ -12,12 +12,4 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Base\Abstractions\" />
-    <Folder Include="Entries\" />
-    <Folder Include="BrandAggregate\" />
-    <Folder Include="CategoryAggregate\" />
-    <Folder Include="ProductAggregate\" />
-  </ItemGroup>
-
 </Project>

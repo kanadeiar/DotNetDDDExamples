@@ -1,0 +1,73 @@
+﻿using AutoFixture.Xunit2;
+using DMHexagonal.Catalog.Core.BrandAggregate;
+using DMHexagonal.Catalog.Core.BrandAggregate.Events;
+using DMHexagonal.Catalog.Core.BrandAggregate.Values;
+using DMHexagonal.Catalog.Core.Entries;
+using FluentAssertions;
+using Kanadeiar.Common.Tests;
+
+namespace DMHexagonal.Catalog.Core.Tests.Unit.BrandAggregate;
+
+public class BrandItemTests
+{
+    [Theory(DisplayName = "Проверка создания нового бренда товаров")]
+    [InlineAutoMoqData(1, "Бренд")]
+    public void TestCreate(int id, string name)
+    {
+        var actual = BrandItem.Create(new BrandId(id), new BrandNameValue(name));
+
+        var entry = actual.Entry();
+        entry.Id.Should().Be(id);
+        entry.Name.Should().Be(name);
+        var events = actual.Changes();
+        events.Count().Should().Be(1);
+        (events.Last() as BrandCreated).Id.Id.Should().Be(id);
+        (events.Last() as BrandCreated).Name.Name.Should().Be(name);
+    }
+
+    [Theory(DisplayName = "Проверка нарушения инвариантов брендов товаров")]
+    [InlineAutoMoqData(0, "Тест")]
+    [InlineAutoMoqData(1, "Т")]
+    public void TestCreate_WhenInvariantError(int id, string name)
+    {
+        var act = () =>
+        {
+            _ = BrandItem.Create(new BrandId(id), new BrandNameValue(name));
+        };
+
+        act.Should().Throw<ApplicationException>();
+    }
+
+    [Theory(DisplayName = "Проверка возможности изменения названия элемента")]
+    [AutoMoqData]
+    public void TestRename(BrandEntry entry)
+    {
+        var expected = new BrandNameValue("Новое имя");
+        var sut = BrandItem.Restore(entry);
+
+        sut.Rename(expected);
+
+        var actualEntry = sut.Entry();
+        actualEntry.Name.Should().Be(expected.Name);
+        var events = sut.Changes();
+        events.Count().Should().Be(1);
+        (events.Last() as BrandRenamed).Name.Should().Be(expected);
+    }
+
+    [Theory(DisplayName = "Проверка возможности удаления элемента")]
+    [AutoData]
+    public void TestDeleteItem(BrandEntry entry)
+    {
+        var expected = 1;
+        entry = new BrandEntry { Id = expected, Name = entry.Name, IsDeleted = false };
+        var sut = BrandItem.Restore(entry);
+
+        sut.Delete();
+
+        var actualEntry = sut.Entry();
+        actualEntry.IsDeleted.Should().Be(true);
+        var events = sut.Changes();
+        events.Count().Should().Be(1);
+        (events.Last() as BrandDeleted).Id.Id.Should().Be(expected);
+    }
+}

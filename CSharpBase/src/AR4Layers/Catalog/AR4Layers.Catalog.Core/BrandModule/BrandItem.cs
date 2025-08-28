@@ -1,5 +1,4 @@
-﻿using AR4Layers.Catalog.DataAccess;
-using AR4Layers.Catalog.DataAccess.Entries;
+﻿using AR4Layers.Catalog.DataAccess.Entries;
 using AR4Layers.Catalog.DataAccess.Registries;
 using Kanadeiar.Common.Functionals;
 

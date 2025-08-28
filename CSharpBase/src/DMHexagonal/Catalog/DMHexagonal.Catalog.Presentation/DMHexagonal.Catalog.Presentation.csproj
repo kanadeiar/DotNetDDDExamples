@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DMHexagonal.Catalog.Application\DMHexagonal.Catalog.Application.csproj" />
+    <ProjectReference Include="..\DMHexagonal.Catalog.Infra\DMHexagonal.Catalog.Infra.csproj" />
   </ItemGroup>
 
 </Project>

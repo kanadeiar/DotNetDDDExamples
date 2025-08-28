@@ -10,9 +10,4 @@
     <ProjectReference Include="..\DMHexagonal.Catalog.Core\DMHexagonal.Catalog.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Ports\" />
-    <Folder Include="CatalogFeature\" />
-  </ItemGroup>
-
 </Project>

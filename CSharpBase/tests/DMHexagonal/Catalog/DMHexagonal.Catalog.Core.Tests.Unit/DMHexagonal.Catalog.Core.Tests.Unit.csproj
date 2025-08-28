@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\AR4Layers\Catalog\AR4Layers.Catalog.Presentation\AR4Layers.Catalog.Presentation.csproj" />
+    <ProjectReference Include="..\..\..\..\src\DMHexagonal\Catalog\DMHexagonal.Catalog.Core\DMHexagonal.Catalog.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
