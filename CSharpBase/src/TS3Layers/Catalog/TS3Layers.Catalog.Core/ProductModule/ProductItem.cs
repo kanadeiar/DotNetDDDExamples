@@ -6,7 +6,7 @@ namespace TS3Layers.Catalog.Core.ProductModule;
 public class ProductItem(int id, string name, decimal price, int brandId, int categoryId, bool isDeleted = false)
 {
     private readonly int _id = id
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
+        .Require(id >= 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
     private string _name = name
         .Require(name!.Length is >= 3 and <= 290, () => throw new ApplicationException("Название товара должно быть приемлемой длинны"));
     private decimal _price = price
@@ -41,6 +41,10 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
         _isDeleted = true;
     }
 
+    public override string ToString() => $"{_name}";
+
+    public string FullText() => $"{_name} - {_price} руб.";
+
     public ProductEntry Entry() =>
         new()
         {
@@ -51,8 +55,4 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
             CategoryId = _categoryId,
             IsDeleted = _isDeleted,
         };
-
-    public override string ToString() => $"{_name}";
-
-    public string FullText() => $"{_name} - {_price} руб.";
 }

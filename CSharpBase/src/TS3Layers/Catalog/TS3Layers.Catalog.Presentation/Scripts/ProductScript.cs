@@ -8,16 +8,26 @@ public class ProductScript(ProductStorage storage)
 {
     public Result<IEnumerable<ProductItem>> AllItems()
     {
-        var items = storage.All().Select(ProductItem.Restore);
+        var items = storage.Load(e => !e.IsDeleted).Select(ProductItem.Restore);
 
         return Result.Ok(items);
     }
 
-    public Result<IEnumerable<ProductItem>> Filter(string expectedName, int expectedBrandId, int expectedCategoryId)
+    public Result<IEnumerable<ProductItem>> Filter(string name = "", int brandId = 0, int categoryId = 0)
     {
-        var items = storage.All()
-            .Where(p => p.Name.StartsWith(expectedName) && p.BrandId == expectedBrandId && p.CategoryId == expectedCategoryId)
-            .Select(ProductItem.Restore);
+        var query = storage.Load(e => !e.IsDeleted).AsQueryable();
+        if (string.IsNullOrEmpty(name) == false)
+        {
+            query = query.Where(p => p.Name.StartsWith(name));
+        }
+        query = brandId > 0 
+            ? query.Where(p => p.BrandId == brandId) 
+            : query;
+        query = categoryId > 0
+            ? query.Where(p => p.CategoryId == categoryId)
+            : query;
+
+        var items = query.AsEnumerable().Select(ProductItem.Restore);
 
         return Result.Ok(items);
     }
@@ -27,13 +37,13 @@ public class ProductScript(ProductStorage storage)
         try
         {
             storage.BeginTransaction();
-            var id = storage.NextIdentity();
 
-            var item = new ProductItem(id, name, price, brandId, categoryId);
+            var item = new ProductItem(0, name, price, brandId, categoryId);
 
-            storage.Save(item.Entry());
+            var entry = item.Entry();
+            storage.Save(entry);
             storage.Commit();
-            return Result.Ok(id);
+            return Result.Ok(entry.Id);
         }
         catch (Exception e)
         {

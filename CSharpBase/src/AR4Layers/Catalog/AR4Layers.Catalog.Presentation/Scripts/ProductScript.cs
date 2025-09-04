@@ -13,7 +13,7 @@ public class ProductScript
         return _service.AllItems();
     }
 
-    public Result<IEnumerable<ProductItem>> Filter(string name, int brandId, int categoryId)
+    public Result<IEnumerable<ProductItem>> Filter(string name = "", int brandId = 0, int categoryId = 0)
     {
         var items = _service.AllItems()
             .Throw(f => throw new ApplicationException())

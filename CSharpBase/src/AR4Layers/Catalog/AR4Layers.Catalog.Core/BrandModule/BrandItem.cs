@@ -1,5 +1,4 @@
-﻿using AR4Layers.Catalog.DataAccess;
-using AR4Layers.Catalog.DataAccess.Entries;
+﻿using AR4Layers.Catalog.DataAccess.Entries;
 using AR4Layers.Catalog.DataAccess.Registries;
 using Kanadeiar.Common.Functionals;
 
@@ -7,18 +6,17 @@ namespace AR4Layers.Catalog.Core.BrandModule;
 
 public class BrandItem(int id, string name, bool isDeleted = false)
 {
+    private int _id = id
+        .Require(id >= 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
     private string _name = name
         .Require(name!.Length is >= 3 and <= 300, () => throw new ApplicationException("Название бренда должно быть приемлемой длинны"));
     private bool _isDeleted = isDeleted;
 
-    public int Id { get; } = id
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
+    public int Id => _id;
 
     public static BrandItem Create(string name)
     {
-        var id = DataRegistry.BrandStorage.NextIdentity();
-
-        return new BrandItem(id, name);
+        return new BrandItem(0, name);
     }
 
     public static BrandItem Restore(BrandEntry entry)
@@ -67,6 +65,7 @@ public class BrandItem(int id, string name, bool isDeleted = false)
 
             DataRegistry.BrandStorage.Save(entity);
 
+            _id = entity.Id;
             return Result.Ok();
         }
         catch (Exception e)

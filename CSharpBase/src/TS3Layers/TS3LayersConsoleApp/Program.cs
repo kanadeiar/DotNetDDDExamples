@@ -5,9 +5,9 @@ using TS3LayersConsoleApp.Helpers;
 ConsoleHelper.PrintHeader("Образец основного поддомена на языке C#.", "Предметно-ориентированное проектирование на платформе .NET. Примеры приложений.");
 ConsoleHelper.PrintLine("Образец: транзакционный сценарий, трехслойная архитектура и перевернутая пирамида тестирования.");
 
-var generalScript = GeneralApplicationHelper.CreateGeneralScript();
-var brandsScript = GeneralApplicationHelper.CreateBrandScript();
-var categoriesScript = GeneralApplicationHelper.CreateCategoryScript();
+var generalScript = CommonHelper.CreateGeneralScript();
+var brandsScript = CommonHelper.CreateBrandScript();
+var categoriesScript = CommonHelper.CreateCategoryScript();
 
 generalScript.InitDemo()
    .Throw(fail => throw new ApplicationException(fail.Error));
@@ -36,7 +36,7 @@ foreach (var text in categories)
 }
 
 ConsoleHelper.Pause("Нажать для начала изменений ...");
-var script = GeneralApplicationHelper.CreateScript();
+var script = CommonHelper.CreateScript();
 
 var id = script.AddItem("newItem", 1, brands.First().Entry().Id, categories.First().Entry().Id)
     .TryGetValue(fail => throw new ApplicationException(fail.Error));

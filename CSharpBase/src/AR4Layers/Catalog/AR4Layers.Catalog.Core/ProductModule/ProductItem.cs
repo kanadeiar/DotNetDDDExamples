@@ -6,6 +6,8 @@ namespace AR4Layers.Catalog.Core.ProductModule;
 
 public class ProductItem(int id, string name, decimal price, int brandId, int categoryId, bool isDeleted = false)
 {
+    private int _id = id
+        .Require(id >= 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
     private string _name = name
         .Require(name!.Length is >= 3 and <= 290, () => throw new ApplicationException("Название товара должно быть приемлемой длинны"));
     private decimal _price = price
@@ -16,14 +18,11 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
         .Require(categoryId != 0, () => throw new ApplicationException("Идентификатор каталога должен быть задан"));
     private bool _isDeleted = isDeleted;
 
-    public int Id { get; } = id
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
+    public int Id => _id;
 
     public static ProductItem Create(string name, decimal price, int brandId, int categoryId)
     {
-        var id = DataRegistry.ProductStorage.NextIdentity();
-
-        return new ProductItem(id, name, price, brandId, categoryId);
+        return new ProductItem(0, name, price, brandId, categoryId);
     }
 
     public static ProductItem Restore(ProductEntry entry)
@@ -50,8 +49,24 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
         _isDeleted = true;
     }
 
-    public bool Filter(string name, int brandId, int categoryId) =>
-        _name.StartsWith(name) && _brandId == brandId && _categoryId == categoryId;
+    public bool Filter(string name = "", int brandId = 0, int categoryId = 0)
+    {
+        List<Func<bool>> actions = [];
+        if (string.IsNullOrEmpty(name) == false)
+        {
+            actions.Add(() => _name.StartsWith(name));
+        }
+        if (brandId > 0)
+        {
+            actions.Add(() => _brandId == brandId);
+        }
+        if (categoryId > 0)
+        {
+            actions.Add(() => _categoryId == categoryId);
+        }
+
+        return actions.All(act => act.Invoke());
+    }
 
     #region ActiveRecord
 
@@ -84,7 +99,8 @@ public class ProductItem(int id, string name, decimal price, int brandId, int ca
             var entity = Entry();
 
             DataRegistry.ProductStorage.Save(entity);
-                
+
+            _id = entity.Id;
             return Result.Ok();
         }
         catch (Exception e)

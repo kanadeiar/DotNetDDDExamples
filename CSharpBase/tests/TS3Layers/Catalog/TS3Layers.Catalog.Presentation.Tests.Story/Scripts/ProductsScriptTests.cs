@@ -11,7 +11,7 @@ public class ProductsScriptTests
 {
     [Theory(DisplayName = "История: Как пользователь, " +
                           "я хочу просмотреть список всех товаров, " +
-                          "чтобы просмотреть все доступные товары.")]
+                          "чтобы выбрать какие-либо из них для покупки.")]
     [AutoMoqData]
     public void StoryTestAllProducts(ProductStorage storage)
     {
@@ -31,7 +31,7 @@ public class ProductsScriptTests
                           "я могу отфильтровать товары по названию, бренду и категории," +
                           "для того, чтобы быстро найти нужный мне товар.")]
     [AutoMoqData]
-    public void StoryTestFilter(ProductStorage storage)
+    public void StoryTestFilter_WhenAnd(ProductStorage storage)
     {
         var expected = new ProductEntry { Id = 2, Name = "Суперимя", Price = 311, BrandId = 4, CategoryId = 8 };
         storage.Save(new ProductEntry { Id = 1, Name = "Суперимя", Price = 131, BrandId = 4, CategoryId = 1 });
@@ -45,6 +45,41 @@ public class ProductsScriptTests
             .ToArray();
 
         items.Length.Should().Be(1);
+        items.First().Entry().Id.Should().Be(expected.Id);
+    }
+
+    [Theory(DisplayName = "История: Как пользователь, " +
+                          "я могу как угодно отфильтровать товары как по названию, по бренду, так и по категории," +
+                          "для того, чтобы быстро найти нужный мне товар.")]
+    [AutoMoqData]
+    public void StoryTestFilter_WhenOr(ProductStorage storage)
+    {
+        var expected = new ProductEntry { Id = 2, Name = "Суперимя", Price = 311, BrandId = 4, CategoryId = 8 };
+        storage.Save(new ProductEntry { Id = 1, Name = "Суперимя", Price = 131, BrandId = 4, CategoryId = 1 });
+        storage.Save(expected);
+        storage.Save(new ProductEntry { Id = 3, Name = "Суперимя", Price = 11, BrandId = 1, CategoryId = 8 });
+        storage.Save(new ProductEntry { Id = 4, Name = "Имя", Price = 11, BrandId = 4, CategoryId = 8 });
+        var sut = new ProductScript(storage);
+
+        var items = sut.Filter(expected.Name)
+            .Throw(_ => throw new ApplicationException())
+            .ToArray();
+
+        items.Length.Should().Be(3);
+        items.First().Entry().Id.Should().Be(1);
+
+        items = sut.Filter(brandId: expected.BrandId)
+            .Throw(_ => throw new ApplicationException())
+            .ToArray();
+
+        items.Length.Should().Be(3);
+        items.First().Entry().Id.Should().Be(1);
+
+        items = sut.Filter(categoryId: expected.CategoryId)
+            .Throw(_ => throw new ApplicationException())
+            .ToArray();
+
+        items.Length.Should().Be(3);
         items.First().Entry().Id.Should().Be(expected.Id);
     }
 
@@ -64,7 +99,7 @@ public class ProductsScriptTests
 
         result.Should().BeOfType<Result>();
         resultTwo.Should().BeOfType<Result>();
-        var actuals = storage.All();
+        var actuals = storage.Load(e => !e.IsDeleted);
         actuals.Count().Should().Be(1);
         actuals.First().Name.Should().Be(expectedName);
         actuals.First().Price.Should().Be(expectedPrice);
@@ -84,7 +119,7 @@ public class ProductsScriptTests
         var result = sut.DeleteItem(1);
 
         result.Should().BeOfType<Result>();
-        var actuals = storage.All();
+        var actuals = storage.Load(e => !e.IsDeleted);
         actuals.Count().Should().Be(1);
         actuals.First().Name.Should().Be(expectedName);
     }

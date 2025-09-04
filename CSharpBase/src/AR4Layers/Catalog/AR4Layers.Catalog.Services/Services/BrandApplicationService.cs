@@ -10,7 +10,7 @@ public class BrandApplicationService
     {
         try
         {
-            var items = DataRegistry.BrandStorage.All().Select(BrandItem.Restore);
+            var items = DataRegistry.BrandStorage.Load(e => !e.IsDeleted).Select(BrandItem.Restore);
 
             return Result.Ok(items);
         }

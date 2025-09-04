@@ -10,7 +10,7 @@ public class ProductApplicationService
     {
         try
         {
-            var items = DataRegistry.ProductStorage.All().Select(ProductItem.Restore);
+            var items = DataRegistry.ProductStorage.Load(e => !e.IsDeleted).Select(ProductItem.Restore);
 
             return Result.Ok(items);
         }
