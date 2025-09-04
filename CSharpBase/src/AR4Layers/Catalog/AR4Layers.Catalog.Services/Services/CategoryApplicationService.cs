@@ -1,7 +1,6 @@
 ﻿using AR4Layers.Catalog.Core.CategoryModule;
 using AR4Layers.Catalog.DataAccess.Registries;
 using Kanadeiar.Common.Functionals;
-using Microsoft.Win32;
 
 namespace AR4Layers.Catalog.Services.Services;
 
@@ -11,7 +10,7 @@ public class CategoryApplicationService
     {
         try
         {
-            var items = DataRegistry.CategoryStorage.All().Select(CategoryItem.Restore);
+            var items = DataRegistry.CategoryStorage.Load(e => !e.IsDeleted).Select(CategoryItem.Restore);
 
             return Result.Ok(items);
         }

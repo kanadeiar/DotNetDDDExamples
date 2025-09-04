@@ -3,10 +3,10 @@ using Kanadeiar.Common.Functionals;
 
 namespace DMHexagonal.Catalog.Core.CategoryAggregate.Values;
 
-public record CategoryId(int Id) : IId
+public record CategoryId(int Value) : IId
 {
-    public int Id { get; } = Id.Require(Id > 0, () =>
+    public int Value { get; } = Value.Require(Value >= 0, () =>
         throw new ApplicationException("Номер идентификатора должен быть положительным числом"));
 
-    public override string ToString() => Id.ToString();
+    public override string ToString() => Value.ToString();
 }

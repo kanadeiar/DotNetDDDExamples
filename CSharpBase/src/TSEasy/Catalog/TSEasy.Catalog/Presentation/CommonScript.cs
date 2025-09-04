@@ -14,8 +14,8 @@ public class CommonScript(ProductStorage productStorage, BrandStorage brandStora
         var c3 = categories.AddItem("Штаны").TryGetValue(f => throw new ApplicationException());
         var brands = new BrandScript(brandStorage);
         var b1 = brands.AddItem("Adidas").TryGetValue(f => throw new ApplicationException());
-        var b2 = brands.AddItem("Adidas").TryGetValue(f => throw new ApplicationException());
-        var b3 = brands.AddItem("Adidas").TryGetValue(f => throw new ApplicationException());
+        var b2 = brands.AddItem("Nike").TryGetValue(f => throw new ApplicationException());
+        var b3 = brands.AddItem("Reebok").TryGetValue(f => throw new ApplicationException());
         var products = new ProductScript(productStorage);
         products.AddItem("Шапка-ушанка", 100, b1, c1);
         products.AddItem("Спортивная карта", 5000, b2, c2);
@@ -26,10 +26,10 @@ public class CommonScript(ProductStorage productStorage, BrandStorage brandStora
 
     public Result<IEnumerable<string>> AllProducts()
     {
-        var brands = brandStorage.All().ToDictionary(b => b.Id, BrandItem.Restore);
-        var categories = categoryStorage.All().ToDictionary(b => b.Id, CategoryItem.Restore);
+        var brands = brandStorage.Load(e => !e.IsDeleted).ToDictionary(b => b.Id, BrandItem.Restore);
+        var categories = categoryStorage.Load(e => !e.IsDeleted).ToDictionary(b => b.Id, CategoryItem.Restore);
 
-        var items = productStorage.All()
+        var items = productStorage.Load(e => !e.IsDeleted)
             .Select(e => new { e, p = ProductItem.Restore(e) })
             .Select(tuple => $"{categories[tuple.e.CategoryId]} {brands[tuple.e.BrandId]} - {tuple.p.FullText()}");
 

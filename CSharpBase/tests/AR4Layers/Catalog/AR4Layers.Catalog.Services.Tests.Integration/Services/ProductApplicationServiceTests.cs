@@ -15,7 +15,7 @@ public class ProductApplicationServiceTests
     public void TestAllProductItems(ProductEntry entry)
     {
         var storage = new ProductStorage();
-        entry = new ProductEntry { Id = storage.NextIdentity(), Name = entry.Name, Price = entry.Price, BrandId = entry.BrandId, CategoryId = entry.CategoryId };
+        entry = new ProductEntry { Id = 0, Name = entry.Name, Price = entry.Price, BrandId = entry.BrandId, CategoryId = entry.CategoryId };
         storage.Save(entry);
         DataRegistry.InitFake(storage);
         var sut = new ProductApplicationService();
@@ -39,8 +39,8 @@ public class ProductApplicationServiceTests
 
         sut.AddItem(name, price, brandId, categoryId);
 
-        storage.All().Count().Should().Be(1);
-        var first = storage.All().First();
+        storage.Load(e => !e.IsDeleted).Count().Should().Be(1);
+        var first = storage.Load(e => !e.IsDeleted).First();
         first.Name.Should().Be(name);
         first.Price.Should().Be(price);
         first.BrandId.Should().Be(brandId);
@@ -53,7 +53,7 @@ public class ProductApplicationServiceTests
     {
         var expected = "newName";
         var storage = new ProductStorage();
-        entry = new ProductEntry { Id = storage.NextIdentity(), Name = entry.Name, Price = entry.Price, BrandId = entry.BrandId, CategoryId = entry.CategoryId };
+        entry = new ProductEntry { Id = 0, Name = entry.Name, Price = entry.Price, BrandId = entry.BrandId, CategoryId = entry.CategoryId };
         storage.Save(entry);
         DataRegistry.InitFake(storage);
         var sut = new ProductApplicationService();
@@ -61,7 +61,7 @@ public class ProductApplicationServiceTests
         var result = sut.ChangeName(entry.Id, expected);
 
         result.Should().BeOfType<Result>();
-        var first = storage.All().First();
+        var first = storage.Load(e => !e.IsDeleted).First();
         first.Name.Should().Be(expected);
     }
 
@@ -71,7 +71,7 @@ public class ProductApplicationServiceTests
     {
         var expected = 333;
         var storage = new ProductStorage();
-        entry = new ProductEntry { Id = storage.NextIdentity(), Name = entry.Name, Price = entry.Price, BrandId = entry.BrandId, CategoryId = entry.CategoryId };
+        entry = new ProductEntry { Id = 0, Name = entry.Name, Price = entry.Price, BrandId = entry.BrandId, CategoryId = entry.CategoryId };
         storage.Save(entry);
         DataRegistry.InitFake(storage);
         var sut = new ProductApplicationService();
@@ -79,7 +79,7 @@ public class ProductApplicationServiceTests
         var result = sut.ChangePrice(entry.Id, expected);
 
         result.Should().BeOfType<Result>();
-        var first = storage.All().First();
+        var first = storage.Load(e => !e.IsDeleted).First();
         first.Price.Should().Be(expected);
     }
 
@@ -88,7 +88,7 @@ public class ProductApplicationServiceTests
     public void TestDeleteProductItem(ProductEntry entry)
     {
         var storage = new ProductStorage();
-        entry = new ProductEntry { Id = storage.NextIdentity(), Name = entry.Name, Price = entry.Price, BrandId = entry.BrandId, CategoryId = entry.CategoryId };
+        entry = new ProductEntry { Id = 0, Name = entry.Name, Price = entry.Price, BrandId = entry.BrandId, CategoryId = entry.CategoryId };
         storage.Save(entry);
         DataRegistry.InitFake(storage);
         var sut = new ProductApplicationService();
@@ -96,6 +96,6 @@ public class ProductApplicationServiceTests
         var result = sut.DeleteItem(entry.Id);
 
         result.Should().BeOfType<Result>();
-        storage.All().Should().BeEmpty();
+        storage.Load(e => !e.IsDeleted).Should().BeEmpty();
     }
 }

@@ -2,10 +2,10 @@
 
 namespace DMHexagonal.Catalog.Core.ProductAggregate.Values;
 
-public record ProductNameValue(string Name)
+public record ProductNameValue(string Value)
 {
-    public string Name { get; } = Name.Require(Name.Length is >= 3 and <= 300, () =>
+    public string Value { get; } = Value.Require(Value.Length is >= 3 and <= 300, () =>
         throw new ApplicationException("Название категории товаров должно быть длинной от 3 до 300 символов"));
 
-    public override string ToString() => $"{Name}";
+    public override string ToString() => $"{Value}";
 }

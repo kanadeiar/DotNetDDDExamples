@@ -105,7 +105,7 @@ public class ProductScriptTests
 
         result.Should().BeOfType<Result>();
         resultTwo.Should().BeOfType<Result>();
-        var actuals = storage.All();
+        var actuals = storage.Load(e => !e.IsDeleted);
         actuals.Count().Should().Be(1);
         actuals.First().Name.Should().Be(expectedName);
         actuals.First().Price.Should().Be(expectedPrice);
@@ -126,9 +126,8 @@ public class ProductScriptTests
         var result = sut.DeleteItem(1);
 
         result.Should().BeOfType<Result>();
-        var actuals = storage.All();
+        var actuals = storage.Load(e => !e.IsDeleted);
         actuals.Count().Should().Be(1);
         actuals.First().Name.Should().Be(expectedName);
     }
-
 }

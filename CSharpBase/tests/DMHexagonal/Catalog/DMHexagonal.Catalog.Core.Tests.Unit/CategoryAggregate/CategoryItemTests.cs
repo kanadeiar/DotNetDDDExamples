@@ -21,12 +21,12 @@ public class CategoryItemTests
         entry.Name.Should().Be(name);
         var events = actual.Changes();
         events.Count().Should().Be(1);
-        (events.Last() as CategoryCreated).Id.Id.Should().Be(id);
-        (events.Last() as CategoryCreated).Name.Name.Should().Be(name);
+        (events.Last() as CategoryCreated).Id.Value.Should().Be(id);
+        (events.Last() as CategoryCreated).Name.Value.Should().Be(name);
     }
 
     [Theory(DisplayName = "Проверка нарушения инвариантов категории товаров")]
-    [InlineAutoMoqData(0, "Тест")]
+    [InlineAutoMoqData(-1, "Тест")]
     [InlineAutoMoqData(1, "Т")]
     public void TestCreate_WhenInvariantError(int id, string name)
     {
@@ -48,7 +48,7 @@ public class CategoryItemTests
         sut.Rename(expected);
 
         var actualEntry = sut.Entry();
-        actualEntry.Name.Should().Be(expected.Name);
+        actualEntry.Name.Should().Be(expected.Value);
         var events = sut.Changes();
         events.Count().Should().Be(1);
         (events.Last() as CategoryRenamed).Name.Should().Be(expected);
@@ -68,6 +68,6 @@ public class CategoryItemTests
         actualEntry.IsDeleted.Should().Be(true);
         var events = sut.Changes();
         events.Count().Should().Be(1);
-        (events.Last() as CategoryDeleted).Id.Id.Should().Be(expected);
+        (events.Last() as CategoryDeleted).Id.Value.Should().Be(expected);
     }
 }

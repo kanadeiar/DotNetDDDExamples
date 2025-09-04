@@ -39,10 +39,10 @@ public class CategoryItem(CategoryId id, CategoryNameValue name, bool isDeleted 
     public CategoryEntry Entry() =>
         new()
         {
-            Id = Id.Id,
-            Name = _name.Name,
+            Id = Id.Value,
+            Name = _name.Value,
             IsDeleted = _isDeleted,
         };
 
-    public override string ToString() => $"{_name.Name}";
+    public override string ToString() => $"{_name.Value}";
 }

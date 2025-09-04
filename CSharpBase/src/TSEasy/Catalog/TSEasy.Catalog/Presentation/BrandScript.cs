@@ -8,7 +8,7 @@ public class BrandScript(BrandStorage storage)
 {
     public Result<IEnumerable<BrandItem>> AllItems()
     {
-        var items = storage.All().Select(BrandItem.Restore);
+        var items = storage.Load(e => !e.IsDeleted).Select(BrandItem.Restore);
 
         return Result.Ok(items);
     }
@@ -18,13 +18,13 @@ public class BrandScript(BrandStorage storage)
         try
         {
             storage.BeginTransaction();
-            var id = storage.NextIdentity();
 
-            var item = new BrandItem(id, name);
+            var item = new BrandItem(0, name);
 
-            storage.Save(item.Entry());
+            var entry = item.Entry();
+            storage.Save(entry);
             storage.Commit();
-            return Result.Ok(id);
+            return Result.Ok(entry.Id);
         }
         catch (Exception e)
         {

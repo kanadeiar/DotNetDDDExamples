@@ -15,7 +15,7 @@ public class CategoryApplicationServiceTests
     public void TestAllBrandItems(CategoryEntry entry)
     {
         var storage = new CategoryStorage();
-        entry = new CategoryEntry { Id = storage.NextIdentity(), Name = entry.Name };
+        entry = new CategoryEntry { Id = 0, Name = entry.Name };
         storage.Save(entry);
         DataRegistry.InitFake(storage);
         var sut = new CategoryApplicationService();
@@ -38,8 +38,8 @@ public class CategoryApplicationServiceTests
 
         sut.AddItem(name);
 
-        storage.All().Count().Should().Be(1);
-        var first = storage.All().First();
+        storage.Load(e => !e.IsDeleted).Count().Should().Be(1);
+        var first = storage.Load(e => !e.IsDeleted).First();
         first.Name.Should().Be(name);
     }
 
@@ -49,7 +49,7 @@ public class CategoryApplicationServiceTests
     {
         var expected = "newName";
         var storage = new CategoryStorage();
-        entry = new CategoryEntry { Id = storage.NextIdentity(), Name = entry.Name };
+        entry = new CategoryEntry { Id = 0, Name = entry.Name };
         storage.Save(entry);
         DataRegistry.InitFake(storage);
         var sut = new CategoryApplicationService();
@@ -57,7 +57,7 @@ public class CategoryApplicationServiceTests
         var result = sut.ChangeName(entry.Id, expected);
 
         result.Should().BeOfType<Result>();
-        var first = storage.All().First();
+        var first = storage.Load(e => !e.IsDeleted).First();
         first.Name.Should().Be(expected);
     }
 
@@ -66,7 +66,7 @@ public class CategoryApplicationServiceTests
     public void TestDeleteCategoryItem(CategoryEntry entry)
     {
         var storage = new CategoryStorage();
-        entry = new CategoryEntry { Id = storage.NextIdentity(), Name = entry.Name };
+        entry = new CategoryEntry { Id = 0, Name = entry.Name };
         storage.Save(entry);
         DataRegistry.InitFake(storage);
         var sut = new CategoryApplicationService();
@@ -74,6 +74,6 @@ public class CategoryApplicationServiceTests
         var result = sut.DeleteItem(entry.Id);
 
         result.Should().BeOfType<Result>();
-        storage.All().Should().BeEmpty();
+        storage.Load(e => !e.IsDeleted).Should().BeEmpty();
     }
 }

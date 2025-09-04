@@ -3,10 +3,10 @@ using Kanadeiar.Common.Functionals;
 
 namespace DMHexagonal.Catalog.Core.BrandAggregate.Values;
 
-public record BrandId(int Id) : IId
+public record BrandId(int Value) : IId
 {
-    public int Id { get; } = Id.Require(Id > 0, () =>
-        throw new ApplicationException("Номер идентификатора должен быть положительным числом"));
+    public int Value { get; } = Value.Require(Value >= 0, () =>
+        throw new ApplicationException("Номер идентификатора должен быть назначен"));
 
-    public override string ToString() => Id.ToString();
+    public override string ToString() => Value.ToString();
 }

@@ -5,17 +5,17 @@ using Kanadeiar.Common.Functionals;
 ConsoleHelper.PrintHeader("Образец универсального поддомена на языке C#.", "Предметно-ориентированное проектирование на платформе .NET. Примеры приложений.");
 ConsoleHelper.PrintLine("Образец: активная запись, четырехслойная архитектура и ромб тестирования.");
 
-var generalScript = new CommonScript();
+var commonScript = new CommonScript();
 var brandsScript = new BrandScript();
 var categoriesScript = new CategoryScript();
 
-generalScript.InitDemo()
+commonScript.InitDemo()
     .Throw(fail => throw new ApplicationException(fail.Error));
 
 ConsoleHelper.Pause();
 
 ConsoleHelper.PrintLine("Все элементы:");
-var items = generalScript.AllProducts()
+var items = commonScript.AllProducts()
     .TryGetValue(fail => throw new ApplicationException(fail.Error)).ToArray();
 Array.ForEach(items, ConsoleHelper.PrintLine);
 
@@ -46,7 +46,7 @@ productScript.ChangePrice(id, 44)
     .Throw(fail => throw new ApplicationException(fail.Error));
 
 ConsoleHelper.PrintLine("Все элементы после изменений:");
-items = generalScript.AllProducts()
+items = commonScript.AllProducts()
     .TryGetValue(fail => throw new ApplicationException(fail.Error)).ToArray();
 Array.ForEach(items, ConsoleHelper.PrintLine);
 

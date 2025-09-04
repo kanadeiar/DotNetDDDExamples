@@ -1,16 +1,15 @@
 ﻿using DMHexagonal.Catalog.Application.Ports.Base;
 using DMHexagonal.Catalog.Core.BrandAggregate;
 using DMHexagonal.Catalog.Core.BrandAggregate.Values;
+using DMHexagonal.Catalog.Core.Entries;
 
 namespace DMHexagonal.Catalog.Application.Ports;
 
 public interface IBrandStorage : ITransactionalStorage
 {
-    BrandId NextIdentity();
-
-    public IEnumerable<BrandItem> All();
+    public IEnumerable<BrandItem> Load(Predicate<BrandEntry> predicate);
 
     BrandItem Load(BrandId id);
 
-    void Save(BrandItem aggregate);
+    BrandId Save(BrandItem aggregate);
 }

@@ -8,14 +8,12 @@ namespace DMHexagonal.Catalog.Infra.Adapters;
 
 public class BrandStorage(IDispatcher dispatcher) : IBrandStorage
 {
-    private Dictionary<BrandId, BrandEntry> _entries = new();
+    private readonly Dictionary<int, BrandEntry> _entries = new();
     private int _lastId;
 
-    public BrandId NextIdentity() => new(++_lastId);
-
-    public IEnumerable<BrandItem> All()
+    public IEnumerable<BrandItem> Load(Predicate<BrandEntry> predicate)
     {
-        foreach (var entry in _entries.Values)
+        foreach (var entry in _entries.Values.Where(e => predicate(e)))
         {
             yield return BrandItem.Restore(entry);
         }
@@ -23,22 +21,26 @@ public class BrandStorage(IDispatcher dispatcher) : IBrandStorage
 
     public BrandItem Load(BrandId id)
     {
-        var entry = _entries.GetValueOrDefault(id);
-        if (entry == null) throw new ApplicationException("Не удалось найти сущность с идентификатором " + id.Id);
+        var entry = _entries.GetValueOrDefault(id.Value);
+        if (entry == null) throw new ApplicationException("Не удалось найти сущность с идентификатором " + id.Value);
 
         var questionnaire = BrandItem.Restore(entry);
 
         return questionnaire;
     }
 
-    public void Save(BrandItem aggregate)
+    public BrandId Save(BrandItem aggregate)
     {
         var entry = aggregate.Entry();
 
-        _entries[aggregate.Id] = entry;
+        if (entry.Id == 0) entry.Id = ++_lastId;
+
+        _entries[entry.Id] = entry;
 
         var events = aggregate.Changes();
         dispatcher.Publish(events);
+
+        return new BrandId(entry.Id);
     }
 
     public void BeginTransaction() { }

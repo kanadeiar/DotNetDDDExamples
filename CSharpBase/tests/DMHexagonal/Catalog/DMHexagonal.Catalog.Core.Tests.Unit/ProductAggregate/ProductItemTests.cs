@@ -1,9 +1,5 @@
 ﻿using AutoFixture.Xunit2;
-using DMHexagonal.Catalog.Core.BrandAggregate;
-using DMHexagonal.Catalog.Core.BrandAggregate.Events;
 using DMHexagonal.Catalog.Core.BrandAggregate.Values;
-using DMHexagonal.Catalog.Core.CategoryAggregate;
-using DMHexagonal.Catalog.Core.CategoryAggregate.Events;
 using DMHexagonal.Catalog.Core.CategoryAggregate.Values;
 using DMHexagonal.Catalog.Core.Entries;
 using DMHexagonal.Catalog.Core.ProductAggregate;
@@ -28,13 +24,13 @@ public class ProductItemTests
         entry.Price.Should().Be(price);
         var events = actual.Changes();
         events.Count().Should().Be(1);
-        (events.Last() as ProductCreated).Id.Id.Should().Be(id);
-        (events.Last() as ProductCreated).Name.Name.Should().Be(name);
-        (events.Last() as ProductCreated).Price.Price.Should().Be(price);
+        (events.Last() as ProductCreated).Id.Value.Should().Be(id);
+        (events.Last() as ProductCreated).Name.Value.Should().Be(name);
+        (events.Last() as ProductCreated).Price.Value.Should().Be(price);
     }
 
     [Theory(DisplayName = "Проверка нарушения инвариантов товара")]
-    [InlineAutoMoqData(0, "Тест", 300, 1, 1)]
+    [InlineAutoMoqData(-1, "Тест", 300, 1, 1)]
     [InlineAutoMoqData(1, "Т", 300, 1, 1)]
     [InlineAutoMoqData(1, "Тест", -1, 1, 1)]
     [InlineAutoMoqData(1, "Тест", 300, -1, 1)]
@@ -59,7 +55,7 @@ public class ProductItemTests
         sut.Rename(expected);
 
         var actualEntry = sut.Entry();
-        actualEntry.Name.Should().Be(expected.Name);
+        actualEntry.Name.Should().Be(expected.Value);
         var events = sut.Changes();
         events.Count().Should().Be(1);
         (events.Last() as ProductRenamed).Name.Should().Be(expected);
@@ -75,7 +71,7 @@ public class ProductItemTests
         sut.ChangePrice(expected);
 
         var actualEntry = sut.Entry();
-        actualEntry.Price.Should().Be(expected.Price);
+        actualEntry.Price.Should().Be(expected.Value);
         var events = sut.Changes();
         events.Count().Should().Be(1);
         (events.Last() as ProductPriceChanged).Price.Should().Be(expected);
@@ -95,6 +91,6 @@ public class ProductItemTests
         actualEntry.IsDeleted.Should().Be(true);
         var events = sut.Changes();
         events.Count().Should().Be(1);
-        (events.Last() as ProductDeleted).Id.Id.Should().Be(expected);
+        (events.Last() as ProductDeleted).Id.Value.Should().Be(expected);
     }
 }

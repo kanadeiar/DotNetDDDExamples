@@ -21,12 +21,12 @@ public class BrandItemTests
         entry.Name.Should().Be(name);
         var events = actual.Changes();
         events.Count().Should().Be(1);
-        (events.Last() as BrandCreated).Id.Id.Should().Be(id);
-        (events.Last() as BrandCreated).Name.Name.Should().Be(name);
+        (events.Last() as BrandCreated).Id.Value.Should().Be(id);
+        (events.Last() as BrandCreated).Name.Value.Should().Be(name);
     }
 
     [Theory(DisplayName = "Проверка нарушения инвариантов брендов товаров")]
-    [InlineAutoMoqData(0, "Тест")]
+    [InlineAutoMoqData(-1, "Тест")]
     [InlineAutoMoqData(1, "Т")]
     public void TestCreate_WhenInvariantError(int id, string name)
     {
@@ -48,7 +48,7 @@ public class BrandItemTests
         sut.Rename(expected);
 
         var actualEntry = sut.Entry();
-        actualEntry.Name.Should().Be(expected.Name);
+        actualEntry.Name.Should().Be(expected.Value);
         var events = sut.Changes();
         events.Count().Should().Be(1);
         (events.Last() as BrandRenamed).Name.Should().Be(expected);
@@ -68,6 +68,6 @@ public class BrandItemTests
         actualEntry.IsDeleted.Should().Be(true);
         var events = sut.Changes();
         events.Count().Should().Be(1);
-        (events.Last() as BrandDeleted).Id.Id.Should().Be(expected);
+        (events.Last() as BrandDeleted).Id.Value.Should().Be(expected);
     }
 }

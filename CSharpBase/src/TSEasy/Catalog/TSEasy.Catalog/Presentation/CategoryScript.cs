@@ -8,7 +8,7 @@ public class CategoryScript(CategoryStorage storage)
 {
     public Result<IEnumerable<CategoryItem>> AllItems()
     {
-        var items = storage.All().Select(CategoryItem.Restore);
+        var items = storage.Load(e => !e.IsDeleted).Select(CategoryItem.Restore);
 
         return Result.Ok(items);
     }
@@ -18,13 +18,13 @@ public class CategoryScript(CategoryStorage storage)
         try
         {
             storage.BeginTransaction();
-            var id = storage.NextIdentity();
 
-            var item = new CategoryItem(id, name);
+            var item = new CategoryItem(0, name);
 
-            storage.Save(item.Entry());
+            var entry = item.Entry();
+            storage.Save(entry);
             storage.Commit();
-            return Result.Ok(id);
+            return Result.Ok(entry.Id);
         }
         catch (Exception e)
         {

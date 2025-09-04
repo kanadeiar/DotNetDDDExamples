@@ -6,7 +6,7 @@ namespace TSEasy.Catalog.Core;
 public class ProductItem(int id, string name, decimal price, int brandId, int categoryId, bool isDeleted = false)
 {
     private readonly int _id = id
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
+        .Require(id >= 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
     private string _name = name
         .Require(name!.Length is >= 3 and <= 290, () => throw new ApplicationException("Название товара должно быть приемлемой длинны"));
     private decimal _price = price

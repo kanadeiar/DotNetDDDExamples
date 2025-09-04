@@ -1,10 +1,10 @@
 ﻿using DMHexagonal.Catalog.Core.Base;
 using DMHexagonal.Catalog.Core.BrandAggregate.Values;
-using DMHexagonal.Catalog.Core.CategoryAggregate.Events;
 using DMHexagonal.Catalog.Core.CategoryAggregate.Values;
 using DMHexagonal.Catalog.Core.Entries;
 using DMHexagonal.Catalog.Core.ProductAggregate.Events;
 using DMHexagonal.Catalog.Core.ProductAggregate.Values;
+using Kanadeiar.Common.Functionals;
 
 namespace DMHexagonal.Catalog.Core.ProductAggregate;
 
@@ -41,6 +41,25 @@ public class ProductItem(ProductId id, ProductNameValue name, PriceValue price, 
         _price = newPrice;
         ApplyChange(new ProductPriceChanged(Id, newPrice));
     }
+    
+    public bool Filter(string name = "", int brandId = 0, int categoryId = 0)
+    {
+        List<Func<bool>> actions = [];
+        if (string.IsNullOrEmpty(name) == false)
+        {
+            actions.Add(() => _name.Value.StartsWith(name));
+        }
+        if (brandId > 0)
+        {
+            actions.Add(() => _brandId.Value == brandId);
+        }
+        if (categoryId > 0)
+        {
+            actions.Add(() => _categoryId.Value == categoryId);
+        }
+
+        return actions.All(act => act.Invoke());
+    }
 
     public void Delete()
     {
@@ -51,13 +70,15 @@ public class ProductItem(ProductId id, ProductNameValue name, PriceValue price, 
     public ProductEntry Entry() =>
         new()
         {
-            Id = Id.Id,
-            Name = _name.Name,
-            Price = _price.Price,
-            BrandId = _brandId.Id,
-            CategoryId = _categoryId.Id,
+            Id = Id.Value,
+            Name = _name.Value,
+            Price = _price.Value,
+            BrandId = _brandId.Value,
+            CategoryId = _categoryId.Value,
             IsDeleted = _isDeleted,
         };
 
-    public override string ToString() => $"{_name.Name}";
+    public override string ToString() => $"{_name.Value}";
+
+    public string FullText() => $"{_name} - {_price} руб.";
 }

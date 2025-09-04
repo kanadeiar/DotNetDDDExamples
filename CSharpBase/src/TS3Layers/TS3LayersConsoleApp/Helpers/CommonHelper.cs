@@ -3,7 +3,7 @@ using TS3Layers.Catalog.Presentation.Scripts;
 
 namespace TS3LayersConsoleApp.Helpers;
 
-public static class GeneralApplicationHelper
+public static class CommonHelper
 {
     private static readonly CategoryStorage _categoryStorage = new();
     private static readonly BrandStorage _brandStorage = new();

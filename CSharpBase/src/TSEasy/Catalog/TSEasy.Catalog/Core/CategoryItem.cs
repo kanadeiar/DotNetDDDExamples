@@ -6,7 +6,7 @@ namespace TSEasy.Catalog.Core;
 public class CategoryItem(int id, string name, bool isDeleted = false)
 {
     private readonly int _id = id
-        .Require(id != 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
+        .Require(id >= 0, () => throw new ApplicationException("Идентификатор должен быть задан"));
     private string _name = name
         .Require(name!.Length is >= 3 and <= 300, () => throw new ApplicationException("Название должно быть приемлемой длинны"));
     private bool _isDeleted = isDeleted;
