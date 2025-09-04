@@ -24,13 +24,15 @@ public class CommonScriptTests
     public void StoryTestAllProducts(Mock<IProductStorage> mock, Mock<IBrandStorage> brandsMock, Mock<ICategoryStorage> categoriesMock)
     {
         var expected = "Шапки Adidas Шапка-ушанка - 100 руб.";
-        var brand = new BrandItem(new BrandId(1), new BrandNameValue("Adidas"));
+        var brandId = BrandId.New();
+        var brand = new BrandItem(brandId, new BrandNameValue("Adidas"));
         brandsMock.Setup(x => x.Load(It.IsAny<Predicate<BrandEntry>>()))
             .Returns([brand]);
-        var category = new CategoryItem(new CategoryId(1), new CategoryNameValue("Шапки"));
+        var categoryId = CategoryId.New();
+        var category = new CategoryItem(categoryId, new CategoryNameValue("Шапки"));
         categoriesMock.Setup(x => x.Load(It.IsAny<Predicate<CategoryEntry>>()))
             .Returns([category]);
-        var item = new ProductItem(new ProductId(1), new ProductNameValue("Шапка-ушанка"), new PriceValue(100M), new BrandId(1), new CategoryId(1));
+        var item = new ProductItem(new ProductId(Guid.NewGuid()), new ProductNameValue("Шапка-ушанка"), new PriceValue(100M), brandId, categoryId);
         mock.Setup(x => x.Load(It.IsAny<Predicate<ProductEntry>>()))
             .Returns([item]);
         var service = new CommonApplicationService(mock.Object, brandsMock.Object, categoriesMock.Object);

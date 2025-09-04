@@ -8,8 +8,7 @@ namespace DMHexagonal.Catalog.Infra.Adapters;
 
 public class BrandStorage(IDispatcher dispatcher) : IBrandStorage
 {
-    private readonly Dictionary<int, BrandEntry> _entries = new();
-    private int _lastId;
+    private readonly Dictionary<Guid, BrandEntry> _entries = new();
 
     public IEnumerable<BrandItem> Load(Predicate<BrandEntry> predicate)
     {
@@ -32,8 +31,6 @@ public class BrandStorage(IDispatcher dispatcher) : IBrandStorage
     public BrandId Save(BrandItem aggregate)
     {
         var entry = aggregate.Entry();
-
-        if (entry.Id == 0) entry.Id = ++_lastId;
 
         _entries[entry.Id] = entry;
 

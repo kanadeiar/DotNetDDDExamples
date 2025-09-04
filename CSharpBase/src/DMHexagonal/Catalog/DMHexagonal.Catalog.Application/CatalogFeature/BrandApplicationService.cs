@@ -27,7 +27,7 @@ public class BrandApplicationService(IBrandStorage storage)
         {
             storage.BeginTransaction();
 
-            var item = BrandItem.Create(new BrandId(0), name);
+            var item = BrandItem.Create(BrandId.New(), name);
 
             var id = storage.Save(item);
             storage.Commit();
@@ -47,7 +47,6 @@ public class BrandApplicationService(IBrandStorage storage)
         {
             storage.BeginTransaction();
             var item = storage.Load(id);
-            if (item.Id.Value == 0) return Result.Fail("Не удалось найти элемент.");
 
             item.Rename(newName);
 
@@ -68,7 +67,6 @@ public class BrandApplicationService(IBrandStorage storage)
         {
             storage.BeginTransaction();
             var item = storage.Load(id);
-            if (item.Id.Value == 0) return Result.Fail("Не удалось найти элемент.");
 
             item.Delete();
 

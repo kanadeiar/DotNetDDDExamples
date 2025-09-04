@@ -11,8 +11,8 @@ namespace DMHexagonal.Catalog.Core.Tests.Unit.BrandAggregate;
 public class BrandItemTests
 {
     [Theory(DisplayName = "Проверка создания нового бренда товаров")]
-    [InlineAutoMoqData(1, "Бренд")]
-    public void TestCreate(int id, string name)
+    [InlineAutoMoqData("5C60F693-BEF5-E011-A485-80EE7300C695", "Бренд")]
+    public void TestCreate(Guid id, string name)
     {
         var actual = BrandItem.Create(new BrandId(id), new BrandNameValue(name));
 
@@ -26,9 +26,9 @@ public class BrandItemTests
     }
 
     [Theory(DisplayName = "Проверка нарушения инвариантов брендов товаров")]
-    [InlineAutoMoqData(-1, "Тест")]
-    [InlineAutoMoqData(1, "Т")]
-    public void TestCreate_WhenInvariantError(int id, string name)
+    [InlineAutoMoqData("00000000-0000-0000-0000-000000000000", "Тест")]
+    [InlineAutoMoqData("5C60F693-BEF5-E011-A485-80EE7300C695", "Т")]
+    public void TestCreate_WhenInvariantError(Guid id, string name)
     {
         var act = () =>
         {
@@ -58,7 +58,7 @@ public class BrandItemTests
     [AutoData]
     public void TestDeleteItem(BrandEntry entry)
     {
-        var expected = 1;
+        var expected = Guid.Parse("5C60F693-BEF5-E011-A485-80EE7300C695");
         entry = new BrandEntry { Id = expected, Name = entry.Name, IsDeleted = false };
         var sut = BrandItem.Restore(entry);
 

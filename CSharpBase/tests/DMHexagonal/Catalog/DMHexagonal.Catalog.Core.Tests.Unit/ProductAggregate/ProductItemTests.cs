@@ -13,10 +13,10 @@ namespace DMHexagonal.Catalog.Core.Tests.Unit.ProductAggregate;
 public class ProductItemTests
 {
     [Theory(DisplayName = "Проверка создания нового товара")]
-    [InlineAutoMoqData(1, "Товар")]
-    public void TestCreate(int id, string name, decimal price)
+    [InlineAutoMoqData("5C60F693-BEF5-E011-A485-80EE7300C695", "Товар", 1, "5C60F693-BEF5-E011-A485-80EE7300C695")]
+    public void TestCreate(Guid id, string name, decimal price, Guid otherId)
     {
-        var actual = ProductItem.Create(new ProductId(id), new ProductNameValue(name), new PriceValue(price), new BrandId(1), new CategoryId(1));
+        var actual = ProductItem.Create(new ProductId(id), new ProductNameValue(name), new PriceValue(price), new BrandId(otherId), new CategoryId(otherId));
 
         var entry = actual.Entry();
         entry.Id.Should().Be(id);
@@ -30,12 +30,12 @@ public class ProductItemTests
     }
 
     [Theory(DisplayName = "Проверка нарушения инвариантов товара")]
-    [InlineAutoMoqData(-1, "Тест", 300, 1, 1)]
-    [InlineAutoMoqData(1, "Т", 300, 1, 1)]
-    [InlineAutoMoqData(1, "Тест", -1, 1, 1)]
-    [InlineAutoMoqData(1, "Тест", 300, -1, 1)]
-    [InlineAutoMoqData(1, "Тест", 300, 1, -1)]
-    public void TestCreate_WhenInvariantError(int id, string name, decimal price, int brandId, int categoryId)
+    [InlineAutoMoqData("00000000-0000-0000-0000-000000000000", "Тест", 300, "5C60F693-BEF5-E011-A485-80EE7300C695", "5C60F693-BEF5-E011-A485-80EE7300C695")]
+    [InlineAutoMoqData("5C60F693-BEF5-E011-A485-80EE7300C695", "Т", 300, "5C60F693-BEF5-E011-A485-80EE7300C695", "5C60F693-BEF5-E011-A485-80EE7300C695")]
+    [InlineAutoMoqData("5C60F693-BEF5-E011-A485-80EE7300C695", "Тест", -1, "5C60F693-BEF5-E011-A485-80EE7300C695", "5C60F693-BEF5-E011-A485-80EE7300C695")]
+    [InlineAutoMoqData("5C60F693-BEF5-E011-A485-80EE7300C695", "Тест", 300, "00000000-0000-0000-0000-000000000000", "5C60F693-BEF5-E011-A485-80EE7300C695")]
+    [InlineAutoMoqData("5C60F693-BEF5-E011-A485-80EE7300C695", "Тест", 300, "5C60F693-BEF5-E011-A485-80EE7300C695", "00000000-0000-0000-0000-000000000000")]
+    public void TestCreate_WhenInvariantError(Guid id, string name, decimal price, Guid brandId, Guid categoryId)
     {
         var act = () =>
         {
@@ -81,7 +81,7 @@ public class ProductItemTests
     [AutoData]
     public void TestDeleteItem(ProductEntry entry)
     {
-        var expected = 1;
+        var expected = Guid.Parse("5C60F693-BEF5-E011-A485-80EE7300C695");
         entry = new ProductEntry { Id = expected, Name = entry.Name, Price = entry.Price, BrandId = entry.BrandId, CategoryId = entry.CategoryId, IsDeleted = false };
         var sut = ProductItem.Restore(entry);
 

@@ -5,7 +5,6 @@ using DMHexagonal.Catalog.Core.CategoryAggregate.Values;
 using DMHexagonal.Catalog.Core.Entries;
 using DMHexagonal.Catalog.Core.ProductAggregate;
 using DMHexagonal.Catalog.Core.ProductAggregate.Values;
-using DMHexagonal.Catalog.Infra.Adapters;
 using DMHexagonal.Catalog.Presentation.Scripts;
 using FluentAssertions;
 using Kanadeiar.Common.Functionals;
@@ -23,7 +22,7 @@ public class ProductScriptTests
     public void StoryTestAllProducts(Mock<IProductStorage> mock)
     {
         var expected = "Товар";
-        var item = new ProductItem(new ProductId(1), new ProductNameValue(expected), new PriceValue(100M), new BrandId(1), new CategoryId(1));
+        var item = new ProductItem(new ProductId(Guid.NewGuid()), new ProductNameValue(expected), new PriceValue(100M), new BrandId(Guid.NewGuid()), new CategoryId(Guid.NewGuid()));
         mock.Setup(x => x.Load(It.IsAny<Predicate<ProductEntry>>())).Returns([item]);
         var service = new ProductApplicationService(mock.Object);
         var sut = new ProductScript(service);
@@ -42,13 +41,13 @@ public class ProductScriptTests
     [AutoMoqData]
     public void StoryTestFilter(Mock<IProductStorage> mock)
     {
-        var expected = new ProductEntry { Id = 2, Name = "Суперимя", Price = 311, BrandId = 4, CategoryId = 8 };
+        var expected = new ProductEntry { Id = Guid.NewGuid(), Name = "Суперимя", Price = 311, BrandId = Guid.NewGuid(), CategoryId = Guid.NewGuid() };
         mock.Setup(x => x.Load(It.IsAny<Predicate<ProductEntry>>())).Returns(
             [
-                new ProductItem(new ProductId(1), new ProductNameValue("Суперимя"), new PriceValue(131), new BrandId(4), new CategoryId(1)),
+                new ProductItem(ProductId.New(), new ProductNameValue("Суперимя"), new PriceValue(131), new BrandId(expected.BrandId), new CategoryId(Guid.NewGuid())),
                 ProductItem.Restore(expected),
-                new ProductItem(new ProductId(3), new ProductNameValue("Суперимя"), new PriceValue(11), new BrandId(1), new CategoryId(8)),
-                new ProductItem(new ProductId(4), new ProductNameValue("Имя"), new PriceValue(11), new BrandId(4), new CategoryId(8)),
+                new ProductItem(ProductId.New(), new ProductNameValue("Суперимя"), new PriceValue(11), new BrandId(Guid.NewGuid()), new CategoryId(expected.CategoryId)),
+                new ProductItem(ProductId.New(), new ProductNameValue("Имя"), new PriceValue(11), new BrandId(expected.BrandId), new CategoryId(expected.CategoryId)),
             ]);
         var service = new ProductApplicationService(mock.Object);
         var sut = new ProductScript(service);
@@ -67,13 +66,14 @@ public class ProductScriptTests
     [AutoMoqData]
     public void StoryTestFilter_WhenOr(Mock<IProductStorage> mock)
     {
-        var expected = new ProductEntry { Id = 2, Name = "Суперимя", Price = 311, BrandId = 4, CategoryId = 8 };
+        var id = ProductId.New();
+        var expected = new ProductEntry { Id = Guid.NewGuid(), Name = "Суперимя", Price = 311, BrandId = Guid.NewGuid(), CategoryId = Guid.NewGuid() };
         mock.Setup(x => x.Load(It.IsAny<Predicate<ProductEntry>>())).Returns(
         [
-            new ProductItem(new ProductId(1), new ProductNameValue("Суперимя"), new PriceValue(131), new BrandId(4), new CategoryId(1)),
+            new ProductItem(id, new ProductNameValue("Суперимя"), new PriceValue(131), new BrandId(expected.BrandId), new CategoryId(Guid.NewGuid())),
             ProductItem.Restore(expected),
-            new ProductItem(new ProductId(3), new ProductNameValue("Суперимя"), new PriceValue(11), new BrandId(1), new CategoryId(8)),
-            new ProductItem(new ProductId(4), new ProductNameValue("Имя"), new PriceValue(11), new BrandId(4), new CategoryId(8)),
+            new ProductItem(ProductId.New(), new ProductNameValue("Суперимя"), new PriceValue(11), new BrandId(Guid.NewGuid()), new CategoryId(expected.CategoryId)),
+            new ProductItem(ProductId.New(), new ProductNameValue("Имя"), new PriceValue(11), new BrandId(expected.BrandId), new CategoryId(expected.CategoryId)),
         ]);
         var service = new ProductApplicationService(mock.Object);
         var sut = new ProductScript(service);
@@ -83,14 +83,14 @@ public class ProductScriptTests
             .ToArray();
 
         items.Length.Should().Be(3);
-        items.First().Entry().Id.Should().Be(1);
+        items.First().Entry().Id.Should().Be(id.Value);
 
         items = sut.Filter(brandId: expected.BrandId)
             .Throw(_ => throw new ApplicationException())
             .ToArray();
 
         items.Length.Should().Be(3);
-        items.First().Entry().Id.Should().Be(1);
+        items.First().Entry().Id.Should().Be(id.Value);
 
         items = sut.Filter(categoryId: expected.CategoryId)
             .Throw(_ => throw new ApplicationException())
@@ -109,21 +109,21 @@ public class ProductScriptTests
     {
         var expectedName = "Новое название";
         var expectedPrice = 3000;
-        var expected = new ProductItem(new ProductId(1), new ProductNameValue("one"), new PriceValue(11M),
-            new BrandId(1), new CategoryId(1));
-        mock.Setup(x => x.Load(new ProductId(1)))
+        var id = ProductId.New();
+        var expected = new ProductItem(id, new ProductNameValue("one"), new PriceValue(11M), BrandId.New(), CategoryId.New());
+        mock.Setup(x => x.Load(id))
             .Returns(expected);
         var service = new ProductApplicationService(mock.Object);
         var sut = new ProductScript(service);
 
-        var result = sut.ChangeName(1, expectedName);
-        
+        var result = sut.ChangeName(id.Value, expectedName);
+
         result.Should().BeOfType<Result>();
         mock.Verify(x => x.Save(expected), Times.Once);
         expected.Entry().Name.Should().Be(expectedName);
 
-        var resultTwo = sut.ChangePrice(1, expectedPrice);
-        
+        var resultTwo = sut.ChangePrice(id.Value, expectedPrice);
+
         resultTwo.Should().BeOfType<Result>();
         mock.Verify(x => x.Save(expected), Times.Exactly(2));
         expected.Entry().Price.Should().Be(expectedPrice);
@@ -135,14 +135,14 @@ public class ProductScriptTests
     [AutoMoqData]
     public void StoryTestDelete(Mock<IProductStorage> mock)
     {
-        var expected = new ProductItem(new ProductId(1), new ProductNameValue("one"), new PriceValue(11M),
-            new BrandId(1), new CategoryId(1));
-        mock.Setup(x => x.Load(new ProductId(1)))
+        var id = ProductId.New();
+        var expected = new ProductItem(id, new ProductNameValue("one"), new PriceValue(11M), BrandId.New(), CategoryId.New());
+        mock.Setup(x => x.Load(id))
             .Returns(expected);
         var service = new ProductApplicationService(mock.Object);
         var sut = new ProductScript(service);
 
-        var result = sut.DeleteItem(1);
+        var result = sut.DeleteItem(id.Value);
 
         result.Should().BeOfType<Result>();
         mock.Verify(x => x.Save(expected), Times.Once);

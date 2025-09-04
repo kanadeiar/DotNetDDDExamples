@@ -20,7 +20,7 @@ public class BrandScriptTests
     public void StoryTestAllItems(Mock<IBrandStorage> mock)
     {
         var expected = "Бренд";
-        var item = new BrandItem(new BrandId(1), new BrandNameValue(expected));
+        var item = new BrandItem(new BrandId(Guid.NewGuid()), new BrandNameValue(expected));
         mock.Setup(x => x.Load(It.IsAny<Predicate<BrandEntry>>())).Returns([item]);
         var service = new BrandApplicationService(mock.Object);
         var sut = new BrandScript(service);

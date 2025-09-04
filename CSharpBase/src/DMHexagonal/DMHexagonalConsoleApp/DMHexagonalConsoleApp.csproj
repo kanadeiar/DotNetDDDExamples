@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Catalog\DMHexagonal.Catalog.Infra\DMHexagonal.Catalog.Infra.csproj" />
+    <ProjectReference Include="..\Catalog\DMHexagonal.Catalog.Presentation\DMHexagonal.Catalog.Presentation.csproj" />
   </ItemGroup>
 
 </Project>

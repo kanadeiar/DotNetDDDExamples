@@ -20,7 +20,7 @@ public class CategoryScriptTests
     public void StoryTestAllItems(Mock<ICategoryStorage> mock)
     {
         var expected = "Категория";
-        var item = new CategoryItem(new CategoryId(1), new CategoryNameValue(expected));
+        var item = new CategoryItem(new CategoryId(Guid.NewGuid()), new CategoryNameValue(expected));
         mock.Setup(x => x.Load(It.IsAny<Predicate<CategoryEntry>>())).Returns([item]);
         var service = new CategoryApplicationService(mock.Object);
         var sut = new CategoryScript(service);

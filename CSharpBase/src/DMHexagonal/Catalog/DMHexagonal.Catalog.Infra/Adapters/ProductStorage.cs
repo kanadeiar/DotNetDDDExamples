@@ -8,8 +8,7 @@ namespace DMHexagonal.Catalog.Infra.Adapters;
 
 public class ProductStorage(IDispatcher dispatcher) : IProductStorage
 {
-    private readonly Dictionary<int, ProductEntry> _entries = new();
-    private int _lastId;
+    private readonly Dictionary<Guid, ProductEntry> _entries = new();
 
     public IEnumerable<ProductItem> Load(Predicate<ProductEntry> predicate)
     {
@@ -32,8 +31,6 @@ public class ProductStorage(IDispatcher dispatcher) : IProductStorage
     public ProductId Save(ProductItem aggregate)
     {
         var entry = aggregate.Entry();
-
-        if (entry.Id == 0) entry.Id = ++_lastId;
 
         _entries[entry.Id] = entry;
 

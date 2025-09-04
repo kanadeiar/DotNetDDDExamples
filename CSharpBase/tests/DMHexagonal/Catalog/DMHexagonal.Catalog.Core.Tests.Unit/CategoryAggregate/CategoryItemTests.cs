@@ -11,8 +11,8 @@ namespace DMHexagonal.Catalog.Core.Tests.Unit.CategoryAggregate;
 public class CategoryItemTests
 {
     [Theory(DisplayName = "Проверка создания новой категории товаров")]
-    [InlineAutoMoqData(1, "Категория")]
-    public void TestCreate(int id, string name)
+    [InlineAutoMoqData("5C60F693-BEF5-E011-A485-80EE7300C695", "Категория")]
+    public void TestCreate(Guid id, string name)
     {
         var actual = CategoryItem.Create(new CategoryId(id), new CategoryNameValue(name));
 
@@ -26,9 +26,9 @@ public class CategoryItemTests
     }
 
     [Theory(DisplayName = "Проверка нарушения инвариантов категории товаров")]
-    [InlineAutoMoqData(-1, "Тест")]
-    [InlineAutoMoqData(1, "Т")]
-    public void TestCreate_WhenInvariantError(int id, string name)
+    [InlineAutoMoqData("00000000-0000-0000-0000-000000000000", "Тест")]
+    [InlineAutoMoqData("5C60F693-BEF5-E011-A485-80EE7300C695", "Т")]
+    public void TestCreate_WhenInvariantError(Guid id, string name)
     {
         var act = () =>
         {
@@ -58,7 +58,7 @@ public class CategoryItemTests
     [AutoData]
     public void TestDeleteItem(CategoryEntry entry)
     {
-        var expected = 1;
+        var expected = Guid.Parse("5C60F693-BEF5-E011-A485-80EE7300C695");
         entry = new CategoryEntry { Id = expected, Name = entry.Name, IsDeleted = false };
         var sut = CategoryItem.Restore(entry);
 

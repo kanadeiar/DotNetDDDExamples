@@ -29,7 +29,7 @@ public class ProductApplicationService(IProductStorage storage)
         {
             storage.BeginTransaction();
 
-            var item = ProductItem.Create(new ProductId(0), name, price, brand, category);
+            var item = ProductItem.Create(ProductId.New(), name, price, brand, category);
 
             var id = storage.Save(item);
             storage.Commit();
@@ -49,7 +49,6 @@ public class ProductApplicationService(IProductStorage storage)
         {
             storage.BeginTransaction();
             var item = storage.Load(id);
-            if (item.Id.Value == 0) return Result.Fail("Не удалось найти элемент.");
 
             item.Rename(newName);
 
@@ -70,7 +69,6 @@ public class ProductApplicationService(IProductStorage storage)
         {
             storage.BeginTransaction();
             var item = storage.Load(id);
-            if (item.Id.Value == 0) return Result.Fail("Не удалось найти элемент.");
 
             item.ChangePrice(newPrice);
 
@@ -91,7 +89,6 @@ public class ProductApplicationService(IProductStorage storage)
         {
             storage.BeginTransaction();
             var item = storage.Load(id);
-            if (item.Id.Value == 0) return Result.Fail("Не удалось найти элемент.");
 
             item.Delete();
 

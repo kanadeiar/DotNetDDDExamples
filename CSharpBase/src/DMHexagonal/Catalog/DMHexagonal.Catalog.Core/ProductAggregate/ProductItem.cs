@@ -4,7 +4,6 @@ using DMHexagonal.Catalog.Core.CategoryAggregate.Values;
 using DMHexagonal.Catalog.Core.Entries;
 using DMHexagonal.Catalog.Core.ProductAggregate.Events;
 using DMHexagonal.Catalog.Core.ProductAggregate.Values;
-using Kanadeiar.Common.Functionals;
 
 namespace DMHexagonal.Catalog.Core.ProductAggregate;
 
@@ -42,18 +41,18 @@ public class ProductItem(ProductId id, ProductNameValue name, PriceValue price, 
         ApplyChange(new ProductPriceChanged(Id, newPrice));
     }
     
-    public bool Filter(string name = "", int brandId = 0, int categoryId = 0)
+    public bool Filter(string? name = null, Guid? brandId = null, Guid? categoryId = null)
     {
         List<Func<bool>> actions = [];
         if (string.IsNullOrEmpty(name) == false)
         {
             actions.Add(() => _name.Value.StartsWith(name));
         }
-        if (brandId > 0)
+        if (brandId != null)
         {
             actions.Add(() => _brandId.Value == brandId);
         }
-        if (categoryId > 0)
+        if (categoryId != null)
         {
             actions.Add(() => _categoryId.Value == categoryId);
         }

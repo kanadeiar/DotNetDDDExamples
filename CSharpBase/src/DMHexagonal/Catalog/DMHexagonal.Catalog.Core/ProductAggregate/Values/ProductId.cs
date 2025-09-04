@@ -3,10 +3,12 @@ using Kanadeiar.Common.Functionals;
 
 namespace DMHexagonal.Catalog.Core.ProductAggregate.Values;
 
-public record ProductId(int Value) : IId
+public record ProductId(Guid Value) : IId
 {
-    public int Value { get; } = Value.Require(Value >= 0, () =>
-        throw new ApplicationException("Номер идентификатора должен быть положительным числом"));
+    public static ProductId New() => new(Guid.NewGuid());
+
+    public Guid Value { get; } = Value.Require(Value != Guid.Empty, () =>
+        throw new ApplicationException("Номер идентификатора должен быть назначен"));
 
     public override string ToString() => Value.ToString();
 }

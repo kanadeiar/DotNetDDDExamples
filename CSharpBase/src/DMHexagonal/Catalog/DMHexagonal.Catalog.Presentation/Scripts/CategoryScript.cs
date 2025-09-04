@@ -12,7 +12,7 @@ public class CategoryScript(CategoryApplicationService service)
         return service.AllItems();
     }
 
-    public Result<int> AddItem(string name)
+    public Result<Guid> AddItem(string name)
     {
         var result = service.AddItem(new CategoryNameValue(name))
             .Throw(fail => throw new ApplicationException(fail.Error));
@@ -20,12 +20,12 @@ public class CategoryScript(CategoryApplicationService service)
         return Result.Ok(result.Value);
     }
 
-    public Result ChangeName(int id, string newName)
+    public Result ChangeName(Guid id, string newName)
     {
         return service.ChangeName(new CategoryId(id), new CategoryNameValue(newName));
     }
 
-    public Result DeleteItem(int id)
+    public Result DeleteItem(Guid id)
     {
         return service.DeleteItem(new CategoryId(id));
     }

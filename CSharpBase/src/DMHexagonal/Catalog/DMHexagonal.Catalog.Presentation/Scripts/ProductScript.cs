@@ -14,7 +14,7 @@ public class ProductScript(ProductApplicationService service)
         return service.AllItems();
     }
 
-    public Result<IEnumerable<ProductItem>> Filter(string name = "", int brandId = 0, int categoryId = 0)
+    public Result<IEnumerable<ProductItem>> Filter(string name = "", Guid? brandId = null, Guid? categoryId = null)
     {
         var items = service.AllItems()
             .Throw(f => throw new ApplicationException())
@@ -23,7 +23,7 @@ public class ProductScript(ProductApplicationService service)
         return Result.Ok(items);
     }
 
-    public Result<int> AddItem(string name, decimal price, int brandId, int categoryId)
+    public Result<Guid> AddItem(string name, decimal price, Guid brandId, Guid categoryId)
     {
         var result = service.AddItem(new ProductNameValue(name), new PriceValue(price), new BrandId(brandId), new CategoryId(categoryId))
             .Throw(fail => throw new ApplicationException(fail.Error));
@@ -31,17 +31,17 @@ public class ProductScript(ProductApplicationService service)
         return Result.Ok(result.Value);
     }
 
-    public Result ChangeName(int id, string newName)
+    public Result ChangeName(Guid id, string newName)
     {
         return service.ChangeName(new ProductId(id), new ProductNameValue(newName));
     }
 
-    public Result ChangePrice(int id, decimal newPrice)
+    public Result ChangePrice(Guid id, decimal newPrice)
     {
         return service.ChangePrice(new ProductId(id), new PriceValue(newPrice));
     }
 
-    public Result DeleteItem(int id)
+    public Result DeleteItem(Guid id)
     {
         return service.DeleteItem(new ProductId(id));
     }

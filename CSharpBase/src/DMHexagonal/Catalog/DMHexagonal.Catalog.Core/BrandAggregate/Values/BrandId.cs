@@ -3,9 +3,11 @@ using Kanadeiar.Common.Functionals;
 
 namespace DMHexagonal.Catalog.Core.BrandAggregate.Values;
 
-public record BrandId(int Value) : IId
+public record BrandId(Guid Value) : IId
 {
-    public int Value { get; } = Value.Require(Value >= 0, () =>
+    public static BrandId New() => new(Guid.NewGuid());
+
+    public Guid Value { get; } = Value.Require(Value != Guid.Empty, () =>
         throw new ApplicationException("Номер идентификатора должен быть назначен"));
 
     public override string ToString() => Value.ToString();
