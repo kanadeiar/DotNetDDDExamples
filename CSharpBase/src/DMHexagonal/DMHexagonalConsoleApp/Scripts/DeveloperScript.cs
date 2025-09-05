@@ -16,5 +16,10 @@ public static class DeveloperScript
         {
             Console.WriteLine($"## Событие переименования товара c Id: {ev.Id} Новое имя: {ev.Name}");
         });
+
+        dispatcher.RegisterHandler<ProductPriceChanged>(ev =>
+        {
+            Console.WriteLine($"## Событие изменения цены товара c Id: {ev.Id} Новая цена: {ev.Price} руб.");
+        });
     }
 }
