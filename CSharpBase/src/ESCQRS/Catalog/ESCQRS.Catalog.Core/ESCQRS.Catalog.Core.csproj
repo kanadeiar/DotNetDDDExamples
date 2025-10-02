@@ -12,4 +12,8 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ProductAggregate\Events\" />
+  </ItemGroup>
+
 </Project>
